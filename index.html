@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MMSE Test Online</h1>
+            <p>Mini-Mental State Examination</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="content">
+            <!-- Question 1: Orientation to Time -->
+            <div class="question-section active" data-question="1">
+                <h2 class="question-title">1. Orientation to Time</h2>
+                <p class="question-subtitle">Please answer the following questions and click to the box near question:</p>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q1-year" data-points="1">
+                        <label for="q1-year">What year is it? <input type="text" id="year-input" placeholder="Enter year"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q1-season" data-points="1">
+                        <label for="q1-season">What season is it? <input type="text" id="season-input" placeholder="Enter season"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q1-day" data-points="1">
+                        <label for="q1-day">What day of the week is it? <input type="text" id="day-input" placeholder="Enter day"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q1-month" data-points="1">
+                        <label for="q1-month">What month is it? <input type="text" id="month-input" placeholder="Enter month"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q1-date" data-points="1">
+                        <label for="q1-date">What is today's date? <input type="date" id="date-input" placeholder="Enter date"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Orientation to Place -->
+            <div class="question-section" data-question="2">
+                <h2 class="question-title">2. Orientation to Place</h2>
+                <p class="question-subtitle">Where are you now?</p>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q2-country" data-points="1">
+                        <label for="q2-country">Country: <input type="text" id="country-input" placeholder="Enter country"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q2-state" data-points="1">
+                        <label for="q2-state">State/Province: <input type="text" id="state-input" placeholder="Enter state/province"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q2-city" data-points="1">
+                        <label for="q2-city">City/Town: <input type="text" id="city-input" placeholder="Enter city"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q2-location" data-points="1">
+                        <label for="q2-location">Type of location (e.g., home, office): <input type="text" id="location-input" placeholder="Enter location type"></label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="q2-floor" data-points="1">
+                        <label for="q2-floor">Floor/Room number: <input type="text" id="floor-input" placeholder="Enter floor/room"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Registration -->
+            <div class="question-section" data-question="3">
+                <h2 class="question-title">3. Registration</h2>
+                <div class="instruction-box">
+                    <h3>Instructions:</h3>
+                    <p>I will name three objects. Please repeat them now and try to remember them. I will ask you to recall them later.</p>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <h3 style="color: #856404; font-size: 24px; margin-bottom: 15px;">Remember these three words:</h3>
+                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">APPLE</p>
+                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">TABLE</p>
+                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">PENNY</p>
+                </div>
+
+                <p class="question-subtitle">Now please type the three words you just saw:</p>
+                <div class="word-recall-input">
+                    <input type="text" id="reg-word1" placeholder="First word" data-answer="apple">
+                    <input type="text" id="reg-word2" placeholder="Second word" data-answer="table">
+                    <input type="text" id="reg-word3" placeholder="Third word" data-answer="penny">
+                </div>
+            </div>
+
+            <!-- Question 4: Attention and Calculation -->
+            <div class="question-section" data-question="4">
+                <h2 class="question-title">4. Attention and Calculation</h2>
+                <p class="question-subtitle">Please choose ONE of the following tasks:</p>
+                
+                <div class="instruction-box">
+                    <h3>Option A: Serial Sevens</h3>
+                    <p>Count backwards from 100 by sevens. Enter the five answers:</p>
+                    <div class="word-recall-input">
+                        <input type="text" id="serial1" placeholder="100 - 7 = ?" data-answer="93">
+                        <input type="text" id="serial2" placeholder="93 - 7 = ?" data-answer="86">
+                        <input type="text" id="serial3" placeholder="86 - 7 = ?" data-answer="79">
+                        <input type="text" id="serial4" placeholder="79 - 7 = ?" data-answer="72">
+                        <input type="text" id="serial5" placeholder="72 - 7 = ?" data-answer="65">
+                    </div>
+                </div>
+
+                <div class="instruction-box" style="margin-top: 20px;">
+                    <h3>Option B: Spell "WORLD" Backwards</h3>
+                    <p>Type the word WORLD spelled backwards:</p>
+                    <input type="text" id="world-backwards" placeholder="Type WORLD backwards" data-answer="dlrow" style="margin-top: 10px;">
+                </div>
+            </div>
+
+            <!-- Question 5: Recall -->
+            <div class="question-section" data-question="5">
+                <h2 class="question-title">5. Recall</h2>
+                <p class="question-subtitle">Please recall the three words from earlier:</p>
+                
+                <div class="word-recall-input">
+                    <input type="text" id="recall-word1" placeholder="First word" data-answer="apple">
+                    <input type="text" id="recall-word2" placeholder="Second word" data-answer="table">
+                    <input type="text" id="recall-word3" placeholder="Third word" data-answer="penny">
+                </div>
+            </div>
+
+            <!-- Question 6: Naming -->
+            <div class="question-section" data-question="6">
+                <h2 class="question-title">6. Naming</h2>
+                <p class="question-subtitle">Look at the images below and type what they are:</p>
+                
+                <div class="image-display">
+                    <div style="margin: 20px 0;">
+                        <svg width="200" height="200" viewBox="0 0 200 200" style="border: 2px solid #e0e0e0; border-radius: 8px; background: white;">
+                            <!-- Watch -->
+                            <!-- Watch straps -->
+                            <rect x="85" y="20" width="30" height="30" rx="5" fill="#2c3e50" stroke="#1a252f" stroke-width="2"/>
+                            <rect x="85" y="150" width="30" height="30" rx="5" fill="#2c3e50" stroke="#1a252f" stroke-width="2"/>
+
+                            <!-- Watch case outer -->
+                            <circle cx="100" cy="100" r="55" fill="#34495e" stroke="#1a252f" stroke-width="3"/>
+                            <!-- Watch face -->
+                            <circle cx="100" cy="100" r="48" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2"/>
+
+                            <!-- Hour markers -->
+                            <circle cx="100" cy="60" r="3" fill="#2c3e50"/>
+                            <circle cx="130" cy="70" r="2.5" fill="#2c3e50"/>
+                            <circle cx="140" cy="100" r="3" fill="#2c3e50"/>
+                            <circle cx="130" cy="130" r="2.5" fill="#2c3e50"/>
+                            <circle cx="100" cy="140" r="3" fill="#2c3e50"/>
+                            <circle cx="70" cy="130" r="2.5" fill="#2c3e50"/>
+                            <circle cx="60" cy="100" r="3" fill="#2c3e50"/>
+                            <circle cx="70" cy="70" r="2.5" fill="#2c3e50"/>
+
+                            <!-- Numbers -->
+                            <text x="100" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">12</text>
+                            <text x="142" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">3</text>
+                            <text x="100" y="146" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">6</text>
+                            <text x="58" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">9</text>
+
+                            <!-- Hour hand (pointing to 10) -->
+                            <line x1="100" y1="100" x2="82" y2="78" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+                            <!-- Minute hand (pointing to 2) -->
+                            <line x1="100" y1="100" x2="120" y2="72" stroke="#34495e" stroke-width="3" stroke-linecap="round"/>
+                            <!-- Second hand -->
+                            <line x1="100" y1="100" x2="100" y2="68" stroke="#e74c3c" stroke-width="1.5" stroke-linecap="round"/>
+
+                            <!-- Center dot -->
+                            <circle cx="100" cy="100" r="4" fill="#2c3e50"/>
+                            <circle cx="100" cy="100" r="2" fill="#e74c3c"/>
+                        </svg>
+                        <div>
+                            <input type="text" id="object1" placeholder="What is this?" data-answer="watch" style="max-width: 300px; margin: 10px auto;">
+                        </div>
+                    </div>
+
+                    <div style="margin: 20px 0;">
+                        <svg width="200" height="200" viewBox="0 0 200 200" style="border: 2px solid #e0e0e0; border-radius: 8px; background: white;">
+                            <!-- Pencil -->
+                            <defs>
+                                <linearGradient id="woodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#D4A574;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#F4D03F;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#D4A574;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Eraser -->
+                            <rect x="70" y="30" width="60" height="25" rx="3" fill="#FF6B9D" stroke="#E74C3C" stroke-width="2"/>
+                            <rect x="70" y="52" width="60" height="3" fill="#C0392B"/>
+
+                            <!-- Metal ferrule -->
+                            <rect x="68" y="55" width="64" height="15" fill="#BDC3C7" stroke="#95A5A6" stroke-width="1"/>
+                            <line x1="68" y1="58" x2="132" y2="58" stroke="#ECF0F1" stroke-width="1"/>
+                            <line x1="68" y1="67" x2="132" y2="67" stroke="#7F8C8D" stroke-width="1"/>
+
+                            <!-- Wooden body (hexagonal) -->
+                            <polygon points="85,70 115,70 125,100 125,150 115,150 85,150 75,150 75,100"
+                                     fill="url(#woodGrad)" stroke="#D4A574" stroke-width="2"/>
+                            <!-- Wood grain lines -->
+                            <line x1="90" y1="75" x2="88" y2="145" stroke="#C89B5E" stroke-width="1" opacity="0.4"/>
+                            <line x1="110" y1="75" x2="112" y2="145" stroke="#C89B5E" stroke-width="1" opacity="0.4"/>
+
+                            <!-- Wooden tip section (unpainted) -->
+                            <polygon points="85,150 115,150 108,165 92,165" fill="#D4A574" stroke="#A67C52" stroke-width="2"/>
+
+                            <!-- Graphite tip -->
+                            <polygon points="92,165 108,165 100,180" fill="#2C3E50" stroke="#1A252F" stroke-width="2"/>
+                            <polygon points="95,165 105,165 100,175" fill="#34495E"/>
+
+                            <!-- Highlight on pencil body -->
+                            <polygon points="77,75 80,75 80,148 77,148" fill="white" opacity="0.3"/>
+                        <div>
+                            <input type="text" id="object2" placeholder="What is this?" data-answer="pencil" style="max-width: 300px; margin: 10px auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7: Repetition -->
+            <div class="question-section" data-question="7">
+                <h2 class="question-title">7. Repetition</h2>
+                <div class="instruction-box">
+                    <h3>Read the following phrase out loud, then type it exactly:</h3>
+                    <p style="font-size: 24px; font-weight: 600; text-align: center; margin: 20px 0; color: #667eea;">
+                        "No ifs, ands, or buts"
+                    </p>
+                </div>
+                
+                <input type="text" id="repetition" placeholder="Type the phrase exactly" data-answer="no ifs, ands, or buts">
+            </div>
+
+            <!-- Question 8: Three-Step Command -->
+            <div class="question-section" data-question="8">
+                <h2 class="question-title">8. Three-Step Command</h2>
+                <div class="instruction-box">
+                    <h3>Follow these instructions in order:</h3>
+                    <p style="font-size: 18px; margin: 10px 0;">1. Click the BLUE button</p>
+                    <p style="font-size: 18px; margin: 10px 0;">2. Click the RED button</p>
+                    <p style="font-size: 18px; margin: 10px 0;">3. Click the GREEN button</p>
+                </div>
+
+                <div class="command-buttons" id="commandButtons">
+                    <button class="command-btn" data-color="blue" style="background: #4287f5; color: white;">BLUE</button>
+                    <button class="command-btn" data-color="red" style="background: #f54242; color: white;">RED</button>
+                    <button class="command-btn" data-color="green" style="background: #42f545; color: white;">GREEN</button>
+                </div>
+
+                <p id="commandFeedback" style="margin-top: 20px; font-weight: 600; color: #667eea;"></p>
+            </div>
+
+            <!-- Question 9: Reading -->
+            <div class="question-section" data-question="9">
+                <h2 class="question-title">9. Reading and Following Instructions</h2>
+                <div class="instruction-box">
+                    <h3>Read the instruction below and do what it says:</h3>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 40px; text-align: center; margin: 20px 0; border-radius: 8px; border: 3px solid #ffc107;">
+                    <p style="font-size: 36px; font-weight: 600; color: #333;">CLOSE YOUR EYES</p>
+                </div>
+
+                <p class="question-subtitle">After you close your eyes for a moment, check the box below:</p>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eyes-closed" data-points="1">
+                    <label for="eyes-closed">I closed my eyes</label>
+                </div>
+            </div>
+
+            <!-- Question 10: Writing -->
+            <div class="question-section" data-question="10">
+                <h2 class="question-title">10. Writing</h2>
+                <p class="question-subtitle">Write a complete sentence with a subject and verb:</p>
+                
+                <textarea id="sentence" placeholder="Write your sentence here..." rows="3"></textarea>
+                
+                <p style="margin-top: 10px; color: #666; font-size: 14px;">The sentence must make sense and have a subject and a verb.</p>
+            </div>
+
+            <!-- Question 11: Drawing -->
+            <div class="question-section" data-question="11">
+                <h2 class="question-title">11. Copying</h2>
+                <div class="instruction-box">
+                    <h3>Copy the design below:</h3>
+                    <p>Draw two intersecting pentagons (five-sided shapes) in the canvas below.</p>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <svg width="200" height="150" viewBox="0 0 200 150" style="border: 2px solid #667eea; border-radius: 8px; background: white;">
+                        <!-- Reference pentagon pattern -->
+                        <polygon points="50,30 80,20 100,45 70,70 40,60" fill="none" stroke="#333" stroke-width="2"/>
+                        <polygon points="100,45 130,35 150,60 120,85 90,75" fill="none" stroke="#333" stroke-width="2"/>
+                    </svg>
+                    <p style="margin-top: 10px; color: #666; font-size: 14px;">Reference image (copy this in the canvas below)</p>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+                    <div class="canvas-buttons">
+                        <button class="btn btn-clear" id="clearCanvas">Clear</button>
+                        <button class="btn btn-secondary" id="undoCanvas">Undo</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <h2 class="question-title">MMSE Test Results</h2>
+                
+                <div class="score-display">
+                    <h2 id="totalScore">0</h2>
+                    <p>Total Score (out of 30)</p>
+                </div>
+
+                <div class="interpretation" id="interpretationBox">
+                    <h3>Interpretation:</h3>
+                    <div id="interpretationText"></div>
+                </div>
+
+                <div class="interpretation">
+                    <h3>Score Breakdown by Category:</h3>
+                    <div id="categoryBreakdown"></div>
+                </div>
+
+
+                <button class="btn btn-primary" onclick="window.location.reload()" style="width: 100%; margin-top: 20px;">Take Test Again</button>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
+                <button class="btn btn-primary" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
