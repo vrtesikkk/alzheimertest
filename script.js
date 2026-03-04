@@ -6,224 +6,22 @@
         let currentQuestion = 1;
         
         // Константа - общее количество вопросов в тесте
-        const totalQuestions = 11;
+        const totalQuestions = 8;
         
         // Объект для хранения баллов по каждой категории теста
         let scores = {
-            orientation_time: 0,    // Ориентация во времени (максимум 5 баллов)
-            orientation_place: 0,   // Ориентация в месте (максимум 5 баллов)
+            orientation_time: 0,    // Ориентация во времени (максимум 4 балла)
             registration: 0,        // Регистрация слов (максимум 3 балла)
             attention: 0,           // Внимание и вычисления (максимум 5 баллов)
             recall: 0,              // Воспоминание слов (максимум 3 балла)
             naming: 0,              // Называние предметов (максимум 2 балла)
             repetition: 0,          // Повторение фразы (максимум 1 балл)
             command: 0,             // Выполнение команд (максимум 3 балла)
-            reading: 0,             // Чтение и выполнение инструкции (максимум 1 балл)
             writing: 0,             // Написание предложения (максимум 1 балл)
-            drawing: 0              // Рисование фигур (максимум 1 балл)
         };
 
         // Массив для хранения последовательности нажатых кнопок в задании с командами
         let commandSequence = [];
-        
-        // Массив для хранения всех путей рисования на холсте (каждый путь - это одна линия)
-        let drawingPaths = [];
-        
-        // Флаг: true когда пользователь рисует, false когда нет
-        let isDrawing = false;
-        
-        // Последняя координата X мыши/пальца при рисовании
-        let lastX = 0;
-        
-        // Последняя координата Y мыши/пальца при рисовании
-        let lastY = 0;
-
-        // ========================================
-        // НАСТРОЙКА CANVAS ДЛЯ РИСОВАНИЯ
-        // ========================================
-        
-        // Получаем элемент canvas из HTML по его ID
-        const canvas = document.getElementById('drawingCanvas');
-        
-        // Получаем контекст рисования 2D (это позволяет рисовать на canvas)
-        const ctx = canvas.getContext('2d');
-        
-        // Устанавливаем ширину линии в 2 пикселя
-        ctx.lineWidth = 2;
-        
-        // Устанавливаем форму концов линий (круглые концы)
-        ctx.lineCap = 'round';
-        
-        // Устанавливаем цвет линий (темно-серый)
-        ctx.strokeStyle = '#333';
-
-        // ========================================
-        // ФУНКЦИИ ДЛЯ РИСОВАНИЯ
-        // ========================================
-        
-        /**
-         * Функция начала рисования
-         * Вызывается когда пользователь нажимает кнопку мыши или касается экрана
-         */
-        function startDrawing(e) {
-            // Устанавливаем флаг что началось рисование
-            isDrawing = true;
-            
-            // Получаем размеры и позицию canvas на странице
-            const rect = canvas.getBoundingClientRect();
-            
-            // Вычисляем координату X внутри canvas (работает и для мыши и для касаний)
-            // e.clientX - для мыши, e.touches[0].clientX - для касаний экрана
-            lastX = e.clientX - rect.left || e.touches[0].clientX - rect.left;
-            
-            // Вычисляем координату Y внутри canvas
-            lastY = e.clientY - rect.top || e.touches[0].clientY - rect.top;
-            
-            // Добавляем новый пустой массив в drawingPaths для новой линии
-            drawingPaths.push([]);
-        }
-
-        /**
-         * Функция рисования
-         * Вызывается когда пользователь двигает мышью с нажатой кнопкой или пальцем по экрану
-         */
-        function draw(e) {
-            // Если не рисуем, выходим из функции
-            if (!isDrawing) return;
-            
-            // Предотвращаем стандартное поведение браузера (например, прокрутку страницы на телефоне)
-            e.preventDefault();
-            
-            // Получаем размеры и позицию canvas
-            const rect = canvas.getBoundingClientRect();
-            
-            // Вычисляем текущую координату X курсора/пальца
-            const x = e.clientX - rect.left || e.touches[0].clientX - rect.left;
-            
-            // Вычисляем текущую координату Y курсора/пальца
-            const y = e.clientY - rect.top || e.touches[0].clientY - rect.top;
-
-            // Начинаем новый путь рисования
-            ctx.beginPath();
-            
-            // Перемещаем "карандаш" на последнюю позицию (без рисования)
-            ctx.moveTo(lastX, lastY);
-            
-            // Рисуем линию от последней позиции до текущей
-            ctx.lineTo(x, y);
-            
-            // Отображаем нарисованную линию на canvas
-            ctx.stroke();
-
-            // Если есть хотя бы один путь в массиве
-            if (drawingPaths.length > 0) {
-                // Добавляем текущую точку в последний путь (последнюю линию)
-                drawingPaths[drawingPaths.length - 1].push({x, y});
-            }
-
-            // Сохраняем текущие координаты как последние для следующей итерации
-            lastX = x;
-            lastY = y;
-        }
-
-        /**
-         * Функция остановки рисования
-         * Вызывается когда пользователь отпускает кнопку мыши или убирает палец
-         */
-        function stopDrawing() {
-            // Устанавливаем флаг что рисование прекращено
-            isDrawing = false;
-        }
-
-        // ========================================
-        // ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ МЫШИ
-        // ========================================
-        
-        // Когда пользователь нажимает кнопку мыши на canvas - начинаем рисование
-        canvas.addEventListener('mousedown', startDrawing);
-        
-        // Когда пользователь двигает мышью по canvas - рисуем линию
-        canvas.addEventListener('mousemove', draw);
-        
-        // Когда пользователь отпускает кнопку мыши - прекращаем рисование
-        canvas.addEventListener('mouseup', stopDrawing);
-        
-        // Когда курсор покидает область canvas - прекращаем рисование
-        canvas.addEventListener('mouseleave', stopDrawing);
-
-        // ========================================
-        // ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ СЕНСОРНЫХ ЭКРАНОВ
-        // ========================================
-        
-        // Когда пользователь касается экрана - начинаем рисование
-        canvas.addEventListener('touchstart', startDrawing);
-        
-        // Когда пользователь двигает пальцем по экрану - рисуем линию
-        canvas.addEventListener('touchmove', draw);
-        
-        // Когда пользователь убирает палец - прекращаем рисование
-        canvas.addEventListener('touchend', stopDrawing);
-
-        // ========================================
-        // КНОПКИ УПРАВЛЕНИЯ CANVAS
-        // ========================================
-        
-        /**
-         * Обработчик кнопки "Clear" (Очистить)
-         * Полностью очищает canvas и удаляет все нарисованные линии
-         */
-        document.getElementById('clearCanvas').addEventListener('click', () => {
-            // Очищаем весь canvas (от координат 0,0 до полной ширины и высоты)
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Очищаем массив с путями (удаляем все нарисованные линии из памяти)
-            drawingPaths = [];
-        });
-
-        /**
-         * Обработчик кнопки "Undo" (Отменить)
-         * Удаляет последнюю нарисованную линию
-         */
-        document.getElementById('undoCanvas').addEventListener('click', () => {
-            // Проверяем, есть ли что отменять (есть ли нарисованные линии)
-            if (drawingPaths.length > 0) {
-                // Удаляем последний элемент из массива (последнюю линию)
-                drawingPaths.pop();
-                
-                // Перерисовываем canvas без удаленной линии
-                redrawCanvas();
-            }
-        });
-
-        /**
-         * Функция перерисовки canvas
-         * Очищает canvas и рисует заново все линии из массива drawingPaths
-         */
-        function redrawCanvas() {
-            // Полностью очищаем canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Проходим по каждому пути (каждой линии) в массиве
-            drawingPaths.forEach(path => {
-                // Проверяем, что в пути есть хотя бы одна точка
-                if (path.length > 0) {
-                    // Начинаем новый путь рисования
-                    ctx.beginPath();
-                    
-                    // Перемещаем "карандаш" на первую точку линии
-                    ctx.moveTo(path[0].x, path[0].y);
-                    
-                    // Проходим по каждой точке в линии
-                    path.forEach(point => {
-                        // Рисуем линию до этой точки
-                        ctx.lineTo(point.x, point.y);
-                    });
-                    
-                    // Отображаем нарисованную линию
-                    ctx.stroke();
-                }
-            });
-        }
 
         // ========================================
         // ОБРАБОТКА КНОПОК КОМАНД (BLUE, RED, GREEN)
@@ -344,29 +142,18 @@
          * Проверяет ответы пользователя и начисляет баллы
          */
         function calculateScores() {
-            // ВОПРОС 1: ОРИЕНТАЦИЯ ВО ВРЕМЕНИ (максимум 5 баллов)
+            // ВОПРОС 1: ОРИЕНТАЦИЯ ВО ВРЕМЕНИ (максимум 4 балла)
             
             // Обнуляем баллы за ориентацию во времени
             scores.orientation_time = 0;
             
             // Получаем все чекбоксы для вопроса 1 и проверяем каждый
-            document.querySelectorAll('#q1-year, #q1-season, #q1-day, #q1-month, #q1-date').forEach(checkbox => {
+            document.querySelectorAll('#q1-year, #q1-season, #q1-day, #q1-month').forEach(checkbox => {
                 // Если чекбокс отмечен - добавляем 1 балл
                 if (checkbox.checked) scores.orientation_time++;
             });
 
-            // ВОПРОС 2: ОРИЕНТАЦИЯ В МЕСТЕ (максимум 5 баллов)
-            
-            // Обнуляем баллы за ориентацию в месте
-            scores.orientation_place = 0;
-            
-            // Получаем все чекбоксы для вопроса 2 и проверяем каждый
-            document.querySelectorAll('#q2-country, #q2-state, #q2-city, #q2-location, #q2-floor').forEach(checkbox => {
-                // Если чекбокс отмечен - добавляем 1 балл
-                if (checkbox.checked) scores.orientation_place++;
-            });
-
-            // ВОПРОС 3: РЕГИСТРАЦИЯ СЛОВ (максимум 3 балла)
+            // ВОПРОС 2: РЕГИСТРАЦИЯ СЛОВ (максимум 3 балла)
             
             // Обнуляем баллы за регистрацию
             scores.registration = 0;
@@ -390,7 +177,7 @@
                 }
             });
 
-            // ВОПРОС 4: ВНИМАНИЕ И ВЫЧИСЛЕНИЕ (максимум 5 баллов)
+            // ВОПРОС 3: ВНИМАНИЕ И ВЫЧИСЛЕНИЕ (максимум 5 баллов)
             
             // Обнуляем баллы за внимание
             scores.attention = 0;
@@ -540,11 +327,7 @@
 
             // ВОПРОС 9: ЧТЕНИЕ И ВЫПОЛНЕНИЕ (максимум 1 балл)
             
-            // Проверяем отмечен ли чекбокс "I closed my eyes"
-            // Если да - 1 балл, если нет - 0 баллов
-            scores.reading = document.getElementById('eyes-closed').checked ? 1 : 0;
-
-            // ВОПРОС 10: НАПИСАНИЕ ПРЕДЛОЖЕНИЯ (максимум 1 балл)
+            // ВОПРОС 8: НАПИСАНИЕ ПРЕДЛОЖЕНИЯ (максимум 1 балл)
             
             // Получаем текст предложения
             const sentence = document.getElementById('sentence').value.trim();
@@ -559,17 +342,6 @@
                 scores.writing = 1;
             }
 
-            // ВОПРОС 11: РИСОВАНИЕ (максимум 1 балл)
-            
-            // Обнуляем баллы за рисование
-            scores.drawing = 0;
-            
-            // Простая проверка: если нарисовано больше 5 линий - считаем что задание выполнено
-            // В реальном тесте требуется визуальная проверка правильности рисунка
-            if (drawingPaths.length > 5) {
-                // Если есть достаточно линий - 1 балл
-                scores.drawing = 1;
-            }
         }
 
         // ========================================
@@ -602,19 +374,19 @@
             
             // Определяем уровень когнитивных нарушений на основе баллов
             
-            // 25-30 баллов: Норма
-            if (totalScore >= 25) {
+            // 19-22 баллов: Норма
+            if (totalScore >= 22) {
                 interpretation = '<span class="interpretation-level level-normal">Normal cognition</span><p>Score indicates no cognitive impairment.</p>';
             } 
-            // 21-24 балла: Легкие нарушения
-            else if (totalScore >= 21) {
+            // 18-21 балла: Легкие нарушения
+            else if (totalScore >= 18) {
                 interpretation = '<span class="interpretation-level level-mild">Mild cognitive impairment</span><p>Score suggests mild cognitive impairment. Consider professional evaluation.</p>';
             } 
-            // 10-20 баллов: Умеренные нарушения
-            else if (totalScore >= 10) {
+            // 13-17 баллов: Умеренные нарушения
+            else if (totalScore >= 13) {
                 interpretation = '<span class="interpretation-level level-moderate">Moderate cognitive impairment</span><p>Score indicates moderate cognitive impairment. Professional evaluation recommended.</p>';
             } 
-            // 0-9 баллов: Тяжелые нарушения
+            // 0-12 баллов: Тяжелые нарушения
             else {
                 interpretation = '<span class="interpretation-level level-severe">Severe cognitive impairment</span><p>Score suggests severe cognitive impairment. Please consult a healthcare professional.</p>';
             }
@@ -628,17 +400,14 @@
             // Используем template literals (обратные кавычки) для многострочного текста
             // ${переменная} - вставляет значение переменной в текст
             const breakdown = `
-                <p><strong>Orientation to Time:</strong> ${scores.orientation_time}/5</p>
-                <p><strong>Orientation to Place:</strong> ${scores.orientation_place}/5</p>
+                <p><strong>Orientation to Time:</strong> ${scores.orientation_time}/4</p>
                 <p><strong>Registration:</strong> ${scores.registration}/3</p>
                 <p><strong>Attention & Calculation:</strong> ${scores.attention}/5</p>
                 <p><strong>Recall:</strong> ${scores.recall}/3</p>
                 <p><strong>Naming:</strong> ${scores.naming}/2</p>
                 <p><strong>Repetition:</strong> ${scores.repetition}/1</p>
                 <p><strong>Three-Step Command:</strong> ${scores.command}/3</p>
-                <p><strong>Reading:</strong> ${scores.reading}/1</p>
                 <p><strong>Writing:</strong> ${scores.writing}/1</p>
-                <p><strong>Drawing:</strong> ${scores.drawing}/1</p>
             `;
             
             // Вставляем разбивку на страницу

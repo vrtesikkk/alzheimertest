@@ -21,7 +21,7 @@
             <!-- Question 1: Orientation to Time -->
             <div class="question-section active" data-question="1">
                 <h2 class="question-title">1. Orientation to Time</h2>
-                <p class="question-subtitle">Please answer the following questions and click to the box near question:</p>
+                <p class="question-subtitle">Please answer the following questions and then click the box next to each question:</p>
                 
                 <div class="checkbox-group">
                     <div class="checkbox-item">
@@ -40,48 +40,15 @@
                         <input type="checkbox" id="q1-month" data-points="1">
                         <label for="q1-month">What month is it? <input type="text" id="month-input" placeholder="Enter month"></label>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q1-date" data-points="1">
-                        <label for="q1-date">What is today's date? <input type="date" id="date-input" placeholder="Enter date"></label>
-                    </div>
                 </div>
             </div>
 
-            <!-- Question 2: Orientation to Place -->
+            <!-- Question 2: Registration -->
             <div class="question-section" data-question="2">
-                <h2 class="question-title">2. Orientation to Place</h2>
-                <p class="question-subtitle">Where are you now?</p>
-                
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q2-country" data-points="1">
-                        <label for="q2-country">Country: <input type="text" id="country-input" placeholder="Enter country"></label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q2-state" data-points="1">
-                        <label for="q2-state">State/Province: <input type="text" id="state-input" placeholder="Enter state/province"></label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q2-city" data-points="1">
-                        <label for="q2-city">City/Town: <input type="text" id="city-input" placeholder="Enter city"></label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q2-location" data-points="1">
-                        <label for="q2-location">Type of location (e.g., home, office): <input type="text" id="location-input" placeholder="Enter location type"></label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="q2-floor" data-points="1">
-                        <label for="q2-floor">Floor/Room number: <input type="text" id="floor-input" placeholder="Enter floor/room"></label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 3: Registration -->
-            <div class="question-section" data-question="3">
-                <h2 class="question-title">3. Registration</h2>
+                <h2 class="question-title">2. Registration</h2>
                 <div class="instruction-box">
                     <h3>Instructions:</h3>
-                    <p>I will name three objects. Please repeat them now and try to remember them. I will ask you to recall them later.</p>
+                    <p>You will see names of three objects. Please repeat them now and try to remember them. You will be asked to recall them later.</p>
                 </div>
                 
                 <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
@@ -99,9 +66,9 @@
                 </div>
             </div>
 
-            <!-- Question 4: Attention and Calculation -->
-            <div class="question-section" data-question="4">
-                <h2 class="question-title">4. Attention and Calculation</h2>
+            <!-- Question 3: Attention and Calculation -->
+            <div class="question-section" data-question="3">
+                <h2 class="question-title">3. Attention and Calculation</h2>
                 <p class="question-subtitle">Please choose ONE of the following tasks:</p>
                 
                 <div class="instruction-box">
@@ -123,9 +90,9 @@
                 </div>
             </div>
 
-            <!-- Question 5: Recall -->
-            <div class="question-section" data-question="5">
-                <h2 class="question-title">5. Recall</h2>
+            <!-- Question 4: Recall -->
+            <div class="question-section" data-question="4">
+                <h2 class="question-title">4. Recall</h2>
                 <p class="question-subtitle">Please recall the three words from earlier:</p>
                 
                 <div class="word-recall-input">
@@ -135,9 +102,9 @@
                 </div>
             </div>
 
-            <!-- Question 6: Naming -->
-            <div class="question-section" data-question="6">
-                <h2 class="question-title">6. Naming</h2>
+            <!-- Question 5: Naming -->
+            <div class="question-section" data-question="5">
+                <h2 class="question-title">5. Naming</h2>
                 <p class="question-subtitle">Look at the images below and type what they are:</p>
                 
                 <div class="image-display">
@@ -228,9 +195,9 @@
                 </div>
             </div>
 
-            <!-- Question 7: Repetition -->
-            <div class="question-section" data-question="7">
-                <h2 class="question-title">7. Repetition</h2>
+            <!-- Question 6: Repetition -->
+            <div class="question-section" data-question="6">
+                <h2 class="question-title">6. Repetition</h2>
                 <div class="instruction-box">
                     <h3>Read the following phrase out loud, then type it exactly:</h3>
                     <p style="font-size: 24px; font-weight: 600; text-align: center; margin: 20px 0; color: #667eea;">
@@ -241,9 +208,9 @@
                 <input type="text" id="repetition" placeholder="Type the phrase exactly" data-answer="no ifs, ands, or buts">
             </div>
 
-            <!-- Question 8: Three-Step Command -->
-            <div class="question-section" data-question="8">
-                <h2 class="question-title">8. Three-Step Command</h2>
+            <!-- Question 7: Three-Step Command -->
+            <div class="question-section" data-question="7">
+                <h2 class="question-title">7. Three-Step Command</h2>
                 <div class="instruction-box">
                     <h3>Follow these instructions in order:</h3>
                     <p style="font-size: 18px; margin: 10px 0;">1. Click the BLUE button</p>
@@ -260,27 +227,9 @@
                 <p id="commandFeedback" style="margin-top: 20px; font-weight: 600; color: #667eea;"></p>
             </div>
 
-            <!-- Question 9: Reading -->
-            <div class="question-section" data-question="9">
-                <h2 class="question-title">9. Reading and Following Instructions</h2>
-                <div class="instruction-box">
-                    <h3>Read the instruction below and do what it says:</h3>
-                </div>
-                
-                <div style="background: #fff3cd; padding: 40px; text-align: center; margin: 20px 0; border-radius: 8px; border: 3px solid #ffc107;">
-                    <p style="font-size: 36px; font-weight: 600; color: #333;">CLOSE YOUR EYES</p>
-                </div>
-
-                <p class="question-subtitle">After you close your eyes for a moment, check the box below:</p>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="eyes-closed" data-points="1">
-                    <label for="eyes-closed">I closed my eyes</label>
-                </div>
-            </div>
-
-            <!-- Question 10: Writing -->
-            <div class="question-section" data-question="10">
-                <h2 class="question-title">10. Writing</h2>
+            <!-- Question 8: Writing -->
+            <div class="question-section" data-question="8">
+                <h2 class="question-title">8. Writing</h2>
                 <p class="question-subtitle">Write a complete sentence with a subject and verb:</p>
                 
                 <textarea id="sentence" placeholder="Write your sentence here..." rows="3"></textarea>
@@ -288,31 +237,6 @@
                 <p style="margin-top: 10px; color: #666; font-size: 14px;">The sentence must make sense and have a subject and a verb.</p>
             </div>
 
-            <!-- Question 11: Drawing -->
-            <div class="question-section" data-question="11">
-                <h2 class="question-title">11. Copying</h2>
-                <div class="instruction-box">
-                    <h3>Copy the design below:</h3>
-                    <p>Draw two intersecting pentagons (five-sided shapes) in the canvas below.</p>
-                </div>
-
-                <div style="text-align: center; margin: 20px 0;">
-                    <svg width="200" height="150" viewBox="0 0 200 150" style="border: 2px solid #667eea; border-radius: 8px; background: white;">
-                        <!-- Reference pentagon pattern -->
-                        <polygon points="50,30 80,20 100,45 70,70 40,60" fill="none" stroke="#333" stroke-width="2"/>
-                        <polygon points="100,45 130,35 150,60 120,85 90,75" fill="none" stroke="#333" stroke-width="2"/>
-                    </svg>
-                    <p style="margin-top: 10px; color: #666; font-size: 14px;">Reference image (copy this in the canvas below)</p>
-                </div>
-
-                <div class="canvas-container">
-                    <canvas id="drawingCanvas" width="600" height="400"></canvas>
-                    <div class="canvas-buttons">
-                        <button class="btn btn-clear" id="clearCanvas">Clear</button>
-                        <button class="btn btn-secondary" id="undoCanvas">Undo</button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Results Section -->
             <div class="results-section" id="resultsSection">
@@ -320,7 +244,7 @@
                 
                 <div class="score-display">
                     <h2 id="totalScore">0</h2>
-                    <p>Total Score (out of 30)</p>
+                    <p>Total Score (out of 22)</p>
                 </div>
 
                 <div class="interpretation" id="interpretationBox">
