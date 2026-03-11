@@ -1,3 +1,23 @@
+function revealWorldInput() {
+    document.getElementById('world-display').style.display = 'none';
+    document.getElementById('world-ready-btn').style.display = 'none';
+    document.getElementById('world-input-area').style.display = 'block';
+    document.getElementById('world-backwards').focus();
+}
+
+function revealRepetitionInput() {
+    document.getElementById('repetition-display').style.display = 'none';
+    document.getElementById('repetition-ready-btn').style.display = 'none';
+    document.getElementById('repetition-input-area').style.display = 'block';
+    document.getElementById('repetition').focus();
+}
+
+function revealCommandButtons() {
+    document.getElementById('command-instructions-display').style.display = 'none';
+    document.getElementById('command-ready-btn').style.display = 'none';
+    document.getElementById('commandButtons').style.display = 'flex';
+}
+
 // ========================================
         // УПРАВЛЕНИЕ СОСТОЯНИЕМ (STATE MANAGEMENT)
         // ========================================
@@ -6,18 +26,20 @@
         let currentQuestion = 1;
         
         // Константа - общее количество вопросов в тесте
-        const totalQuestions = 8;
+        const totalQuestions = 30;
         
         // Объект для хранения баллов по каждой категории теста
         let scores = {
-            orientation_time: 0,    // Ориентация во времени (максимум 4 балла)
-            registration: 0,        // Регистрация слов (максимум 3 балла)
-            attention: 0,           // Внимание и вычисления (максимум 5 баллов)
-            recall: 0,              // Воспоминание слов (максимум 3 балла)
-            naming: 0,              // Называние предметов (максимум 2 балла)
+            orientation_time: 0,    // Ориентация во времени (максимум 1 балл)
+            registration: 0,        // Регистрация слов (максимум 1 балл)
+            attention: 0,           // Внимание и вычисления (максимум 1 балл)
+            recall: 0,              // Воспоминание слов (максимум 1 балл)
+            naming: 0,              // Называние предметов (максимум 1 балл)
             repetition: 0,          // Повторение фразы (максимум 1 балл)
-            command: 0,             // Выполнение команд (максимум 3 балла)
+            command: 0,             // Выполнение команд (максимум 1 балл)
             writing: 0,             // Написание предложения (максимум 1 балл)
+            // Add scores for q9-q30
+            q9: 0, q10: 0, q11: 0, q12: 0, q13: 0, q14: 0, q15: 0, q16: 0, q17: 0, q18: 0, q19: 0, q20: 0, q21: 0, q22: 0, q23: 0, q24: 0, q25: 0, q26: 0, q27: 0, q28: 0, q29: 0, q30: 0
         };
 
         // Массив для хранения последовательности нажатых кнопок в задании с командами
@@ -61,8 +83,8 @@
                     
                     // Если последовательность правильная
                     if (correct) {
-                        // Начисляем 3 балла за правильное выполнение
-                        scores.command = 3;
+                        // Начисляем 1 балл за правильное выполнение
+                        scores.command = 1;
                         
                         // Показываем сообщение об успехе
                         feedback.textContent = '✓ Correct! You followed all three steps in order.';
@@ -142,18 +164,27 @@
          * Проверяет ответы пользователя и начисляет баллы
          */
         function calculateScores() {
-            // ВОПРОС 1: ОРИЕНТАЦИЯ ВО ВРЕМЕНИ (максимум 4 балла)
+            // ВОПРОС 1: ОРИЕНТАЦИЯ ВО ВРЕМЕНИ (максимум 1 балл)
             
             // Обнуляем баллы за ориентацию во времени
             scores.orientation_time = 0;
             
             // Получаем все чекбоксы для вопроса 1 и проверяем каждый
-            document.querySelectorAll('#q1-year, #q1-season, #q1-day, #q1-month').forEach(checkbox => {
-                // Если чекбокс отмечен - добавляем 1 балл
-                if (checkbox.checked) scores.orientation_time++;
+            // Массив ID полей для ввода ответов на ориентацию во времени
+            const orientationInputs = ['q1-year', 'q1-season', 'q1-day', 'q1-month'];
+            
+            // Проверяем каждое поле ввода
+            orientationInputs.forEach(id => {
+                // Получаем элемент input по ID
+                const input = document.getElementById(id);
+                
+                // Если поле заполнено (не пусто) - добавляем 1 балл
+                if (input && input.value.trim() !== '') {
+                    scores.orientation_time = 1;
+                }
             });
 
-            // ВОПРОС 2: РЕГИСТРАЦИЯ СЛОВ (максимум 3 балла)
+            // ВОПРОС 2: РЕГИСТРАЦИЯ СЛОВ (максимум 1 балл)
             
             // Обнуляем баллы за регистрацию
             scores.registration = 0;
@@ -173,11 +204,11 @@
                 // toLowerCase() - переводим в нижний регистр, trim() - убираем пробелы
                 if (input.value.toLowerCase().trim() === answer) {
                     // Если ответ правильный - добавляем 1 балл
-                    scores.registration++;
+                    scores.registration = 1;
                 }
             });
 
-            // ВОПРОС 3: ВНИМАНИЕ И ВЫЧИСЛЕНИЕ (максимум 5 баллов)
+            // ВОПРОС 3: ВНИМАНИЕ И ВЫЧИСЛЕНИЕ (максимум 1 балл)
             
             // Обнуляем баллы за внимание
             scores.attention = 0;
@@ -201,7 +232,7 @@
                 // Сравниваем ответ пользователя с правильным (без учета пробелов)
                 if (input.value.trim() === answer) {
                     // Если правильно - добавляем 1 балл
-                    serialScore++;
+                    serialScore = 1;
                 }
             });
 
@@ -218,8 +249,8 @@
             
             // Проверяем полностью правильный ответ
             if (worldInput.value.toLowerCase().trim() === worldAnswer) {
-                // Если полностью правильно - 5 баллов
-                worldScore = 5;
+                // Если полностью правильно - 1 балл
+                worldScore = 1;
             } else {
                 // Если не полностью правильно - считаем частичные баллы
                 // Подсчет на основе правильного порядка букв
@@ -249,14 +280,14 @@
                 }
                 
                 // Баллы равны количеству букв в правильном порядке
-                worldScore = correctOrder;
+                worldScore = correctOrder > 0 ? 1 : 0;
             }
 
             // Используем лучший результат из двух вариантов (Serial Sevens или WORLD)
             // Math.max выбирает большее значение
             scores.attention = Math.max(serialScore, worldScore);
 
-            // ВОПРОС 5: ВОСПОМИНАНИЕ СЛОВ (максимум 3 балла)
+            // ВОПРОС 5: ВОСПОМИНАНИЕ СЛОВ (максимум 1 балл)
             
             // Обнуляем баллы за воспоминание
             scores.recall = 0;
@@ -275,7 +306,7 @@
                 // Сравниваем введенное слово с правильным
                 if (input.value.toLowerCase().trim() === answer) {
                     // Если правильно - добавляем 1 балл
-                    scores.recall++;
+                    scores.recall = 1;
                 }
             });
 
@@ -303,7 +334,7 @@
                 // Для второго объекта (карандаш) также принимаем два варианта
                 else if (id === 'object2' && (value === 'pencil' || value === 'pen')) {
                     // Если любой из вариантов правильный - добавляем 1 балл
-                    scores.naming++;
+                    scores.naming = 1; // Устанавливаем 1 балл, так как максимум 2 балла за оба объекта
                 }
             });
 
@@ -342,6 +373,15 @@
                 scores.writing = 1;
             }
 
+            // Questions 9-30: Each is 1 point if correct
+            for (let i = 9; i <= 30; i++) {
+                scores[`q${i}`] = 0;
+                const input = document.getElementById(`q${i}`);
+                if (input && input.value.toLowerCase().trim() === input.dataset.answer) {
+                    scores[`q${i}`] = 1;
+                }
+            }
+
         }
 
         // ========================================
@@ -374,16 +414,16 @@
             
             // Определяем уровень когнитивных нарушений на основе баллов
             
-            // 19-22 баллов: Норма
-            if (totalScore >= 22) {
+            // 19-30 баллов: Норма
+            if (totalScore <= 30) {
                 interpretation = '<span class="interpretation-level level-normal">Normal cognition</span><p>Score indicates no cognitive impairment.</p>';
             } 
             // 18-21 балла: Легкие нарушения
-            else if (totalScore >= 18) {
+            else if (totalScore < 20) {
                 interpretation = '<span class="interpretation-level level-mild">Mild cognitive impairment</span><p>Score suggests mild cognitive impairment. Consider professional evaluation.</p>';
             } 
             // 13-17 баллов: Умеренные нарушения
-            else if (totalScore >= 13) {
+            else if (totalScore < 13) {
                 interpretation = '<span class="interpretation-level level-moderate">Moderate cognitive impairment</span><p>Score indicates moderate cognitive impairment. Professional evaluation recommended.</p>';
             } 
             // 0-12 баллов: Тяжелые нарушения
@@ -399,16 +439,21 @@
             // Создаем HTML строку с баллами по каждой категории
             // Используем template literals (обратные кавычки) для многострочного текста
             // ${переменная} - вставляет значение переменной в текст
-            const breakdown = `
-                <p><strong>Orientation to Time:</strong> ${scores.orientation_time}/4</p>
-                <p><strong>Registration:</strong> ${scores.registration}/3</p>
-                <p><strong>Attention & Calculation:</strong> ${scores.attention}/5</p>
-                <p><strong>Recall:</strong> ${scores.recall}/3</p>
-                <p><strong>Naming:</strong> ${scores.naming}/2</p>
+            let breakdown = `
+                <p><strong>Orientation to Time:</strong> ${scores.orientation_time}/1</p>
+                <p><strong>Registration:</strong> ${scores.registration}/1</p>
+                <p><strong>Attention & Calculation:</strong> ${scores.attention}/1</p>
+                <p><strong>Recall:</strong> ${scores.recall}/1</p>
+                <p><strong>Naming:</strong> ${scores.naming}/1</p>
                 <p><strong>Repetition:</strong> ${scores.repetition}/1</p>
-                <p><strong>Three-Step Command:</strong> ${scores.command}/3</p>
+                <p><strong>Three-Step Command:</strong> ${scores.command}/1</p>
                 <p><strong>Writing:</strong> ${scores.writing}/1</p>
             `;
+            
+            // Add breakdown for questions 9-30
+            for (let i = 9; i <= 30; i++) {
+                breakdown += `<p><strong>Question ${i}:</strong> ${scores[`q${i}`]}/1</p>`;
+            }
             
             // Вставляем разбивку на страницу
             document.getElementById('categoryBreakdown').innerHTML = breakdown;
