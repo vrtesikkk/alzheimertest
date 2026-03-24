@@ -1,3 +1,33 @@
+function speakWord(word) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(word);
+    utt.lang = 'en-US';
+    utt.rate = 0.85;
+
+    const btns = document.querySelectorAll('.word-audio-btn');
+    btns.forEach(b => { if (b.textContent.toLowerCase().includes(word)) b.classList.add('playing'); });
+    utt.onend = () => btns.forEach(b => b.classList.remove('playing'));
+
+    window.speechSynthesis.speak(utt);
+}
+
+function speakAllWords() {
+    const words = ['apple', 'table', 'penny'];
+    let i = 0;
+    window.speechSynthesis.cancel();
+
+    function next() {
+        if (i >= words.length) return;
+        const utt = new SpeechSynthesisUtterance(words[i]);
+        utt.lang = 'en-US';
+        utt.rate = 0.85;
+        utt.onend = () => setTimeout(next, 600);
+        window.speechSynthesis.speak(utt);
+        i++;
+    }
+    next();
+}
+
 function revealWorldInput() {
     document.getElementById('world-display').style.display = 'none';
     document.getElementById('world-ready-btn').style.display = 'none';
@@ -12,6 +42,35 @@ function revealRepetitionInput() {
     document.getElementById('repetition').focus();
 }
 
+function speakPhrase() {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance('No ifs, ands, or buts');
+    utt.lang = 'en-US';
+    utt.rate = 0.8;
+    window.speechSynthesis.speak(utt);
+}
+
+function speakInstructions() {
+    const steps = [
+        'Step one. Click the blue button.',
+        'Step two. Click the red button.',
+        'Step three. Click the green button.'
+    ];
+    let i = 0;
+    window.speechSynthesis.cancel();
+
+    function next() {
+        if (i >= steps.length) return;
+        const utt = new SpeechSynthesisUtterance(steps[i]);
+        utt.lang = 'en-US';
+        utt.rate = 0.85;
+        utt.onend = () => setTimeout(next, 500);
+        window.speechSynthesis.speak(utt);
+        i++;
+    }
+    next();
+}
+
 function revealCommandButtons() {
     document.getElementById('command-instructions-display').style.display = 'none';
     document.getElementById('command-ready-btn').style.display = 'none';
@@ -19,492 +78,214 @@ function revealCommandButtons() {
 }
 
 // ========================================
-        // УПРАВЛЕНИЕ СОСТОЯНИЕМ (STATE MANAGEMENT)
-        // ========================================
-        
-        // Переменная для отслеживания текущего вопроса (начинаем с вопроса 1)
-        let currentQuestion = 1;
-        
-        // Константа - общее количество вопросов в тесте
-        const totalQuestions = 30;
-        
-        // Объект для хранения баллов по каждой категории теста
-        let scores = {
-            orientation_time: 0,    // Ориентация во времени (максимум 1 балл)
-            registration: 0,        // Регистрация слов (максимум 1 балл)
-            attention: 0,           // Внимание и вычисления (максимум 1 балл)
-            recall: 0,              // Воспоминание слов (максимум 1 балл)
-            naming: 0,              // Называние предметов (максимум 1 балл)
-            repetition: 0,          // Повторение фразы (максимум 1 балл)
-            command: 0,             // Выполнение команд (максимум 1 балл)
-            writing: 0,             // Написание предложения (максимум 1 балл)
-            // Add scores for q9-q30
-            q9: 0, q10: 0, q11: 0, q12: 0, q13: 0, q14: 0, q15: 0, q16: 0, q17: 0, q18: 0, q19: 0, q20: 0, q21: 0, q22: 0, q23: 0, q24: 0, q25: 0, q26: 0, q27: 0, q28: 0, q29: 0, q30: 0
-        };
+// STATE
+// ========================================
 
-        // Массив для хранения последовательности нажатых кнопок в задании с командами
-        let commandSequence = [];
+let currentQuestion = 1;
+const totalQuestions = 9;
 
-        // ========================================
-        // ОБРАБОТКА КНОПОК КОМАНД (BLUE, RED, GREEN)
-        // ========================================
-        
-        // Получаем все кнопки команд из HTML
-        const commandButtons = document.querySelectorAll('.command-btn');
-        
-        // Для каждой кнопки команды добавляем обработчик клика
-        commandButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Получаем цвет кнопки из атрибута data-color
-                const color = btn.dataset.color;
-                
-                // Добавляем цвет в массив последовательности нажатых кнопок
-                commandSequence.push(color);
-                
-                // Добавляем CSS класс "clicked" к кнопке (визуальная индикация)
-                btn.classList.add('clicked');
-                
-                // Отключаем кнопку чтобы нельзя было нажать повторно
-                btn.disabled = true;
-                
-                // Получаем элемент для отображения обратной связи
-                const feedback = document.getElementById('commandFeedback');
-                
-                // Показываем пользователю какие шаги он уже выполнил
-                // join(' → ') соединяет элементы массива стрелкой
-                feedback.textContent = `Steps completed: ${commandSequence.join(' → ')}`;
-                
-                // Проверяем, нажал ли пользователь все 3 кнопки
-                if (commandSequence.length === 3) {
-                    // Проверяем правильность последовательности
-                    const correct = commandSequence[0] === 'blue' &&   // Первая кнопка - синяя
-                                  commandSequence[1] === 'red' &&      // Вторая кнопка - красная
-                                  commandSequence[2] === 'green';      // Третья кнопка - зеленая
-                    
-                    // Если последовательность правильная
-                    if (correct) {
-                        // Начисляем 1 балл за правильное выполнение
-                        scores.command = 1;
-                        
-                        // Показываем сообщение об успехе
-                        feedback.textContent = '✓ Correct! You followed all three steps in order.';
-                        
-                        // Делаем текст зеленым
-                        feedback.style.color = '#42f545';
-                    } else {
-                        // Если последовательность неправильная - 0 баллов
-                        scores.command = 0;
-                        
-                        // Показываем сообщение об ошибке и правильную последовательность
-                        feedback.textContent = '✗ Incorrect sequence. The correct order was: blue → red → green';
-                        
-                        // Делаем текст красным
-                        feedback.style.color = '#f54242';
-                    }
-                }
-            });
-        });
+let scores = {
+    orientation_time: 0,  // Q1: max 4  (1 per field)
+    registration: 0,      // Q2: max 3  (1 per word)
+    serial_sevens: 0,     // Q3: max 1
+    world_backwards: 0,   // Q4: max 1
+    naming: 0,            // Q5: max 2  (1 per object)
+    repetition: 0,        // Q6: max 5  (1 per word of phrase)
+    command: 0,           // Q7: max 1
+    writing: 0,           // Q8: max 9
+    papersteps: 0,        // Q9: max 4  (1 per step)
+};
 
-        // ========================================
-        // НАВИГАЦИЯ ПО ВОПРОСАМ
-        // ========================================
-        
-        /**
-         * Функция обновления прогресс-бара
-         * Показывает сколько процентов теста пройдено
-         */
-        function updateProgress() {
-            // Вычисляем процент прогресса (текущий вопрос / всего вопросов * 100)
-            const progress = (currentQuestion / totalQuestions) * 100;
-            
-            // Устанавливаем ширину заполненной части прогресс-бара
-            document.getElementById('progressFill').style.width = progress + '%';
-        }
+let commandSequence = [];
 
-        /**
-         * Функция показа конкретного вопроса
-         * @param {number} num - номер вопроса для показа
-         */
-        function showQuestion(num) {
-            // Скрываем все секции с вопросами (убираем класс 'active')
-            document.querySelectorAll('.question-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Находим секцию с нужным номером вопроса по атрибуту data-question
-            const targetSection = document.querySelector(`[data-question="${num}"]`);
-            
-            // Если секция найдена
-            if (targetSection) {
-                // Показываем её (добавляем класс 'active')
-                targetSection.classList.add('active');
-            }
+// ========================================
+// COMMAND BUTTONS (Q6)
+// ========================================
 
-            // Обновляем кнопки навигации
-            
-            // Показываем кнопку "Previous" только если это не первый вопрос
-            document.getElementById('prevBtn').style.display = num > 1 ? 'block' : 'none';
-            
-            // Меняем текст кнопки "Next" на "Finish Test" если это последний вопрос
-            document.getElementById('nextBtn').textContent = num === totalQuestions ? 'Finish Test' : 'Next';
-            
-            // Сохраняем текущий номер вопроса
-            currentQuestion = num;
-            
-            // Обновляем прогресс-бар
-            updateProgress();
-        }
+document.querySelectorAll('.command-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const color = btn.dataset.color;
+        commandSequence.push(color);
+        btn.classList.add('clicked');
+        btn.disabled = true;
 
-        // ========================================
-        // ПОДСЧЕТ БАЛЛОВ
-        // ========================================
-        
-        /**
-         * Функция подсчета баллов по всем категориям теста
-         * Проверяет ответы пользователя и начисляет баллы
-         */
-        function calculateScores() {
-            // ВОПРОС 1: ОРИЕНТАЦИЯ ВО ВРЕМЕНИ (максимум 1 балл)
-            
-            // Обнуляем баллы за ориентацию во времени
-            scores.orientation_time = 0;
-            
-            // Получаем все чекбоксы для вопроса 1 и проверяем каждый
-            // Массив ID полей для ввода ответов на ориентацию во времени
-            const orientationInputs = ['q1-year', 'q1-season', 'q1-day', 'q1-month'];
-            
-            // Проверяем каждое поле ввода
-            orientationInputs.forEach(id => {
-                // Получаем элемент input по ID
-                const input = document.getElementById(id);
-                
-                // Если поле заполнено (не пусто) - добавляем 1 балл
-                if (input && input.value.trim() !== '') {
-                    scores.orientation_time = 1;
-                }
-            });
+        const feedback = document.getElementById('commandFeedback');
+        feedback.textContent = `Steps completed: ${commandSequence.join(' → ')}`;
 
-            // ВОПРОС 2: РЕГИСТРАЦИЯ СЛОВ (максимум 1 балл)
-            
-            // Обнуляем баллы за регистрацию
-            scores.registration = 0;
-            
-            // Массив ID текстовых полей для ввода трех слов
-            const regWords = ['reg-word1', 'reg-word2', 'reg-word3'];
-            
-            // Проверяем каждое поле ввода
-            regWords.forEach(id => {
-                // Получаем элемент input по ID
-                const input = document.getElementById(id);
-                
-                // Получаем правильный ответ из атрибута data-answer
-                const answer = input.dataset.answer;
-                
-                // Сравниваем введенное значение с правильным ответом
-                // toLowerCase() - переводим в нижний регистр, trim() - убираем пробелы
-                if (input.value.toLowerCase().trim() === answer) {
-                    // Если ответ правильный - добавляем 1 балл
-                    scores.registration = 1;
-                }
-            });
-
-            // ВОПРОС 3: ВНИМАНИЕ И ВЫЧИСЛЕНИЕ (максимум 1 балл)
-            
-            // Обнуляем баллы за внимание
-            scores.attention = 0;
-            
-            // ПРОВЕРКА ВАРИАНТА A: Вычитание семерок (Serial Sevens)
-            
-            // Массив ID полей для ввода ответов на вычитание
-            const serialInputs = ['serial1', 'serial2', 'serial3', 'serial4', 'serial5'];
-            
-            // Переменная для подсчета баллов за вычитание
-            let serialScore = 0;
-            
-            // Проверяем каждый ответ
-            serialInputs.forEach(id => {
-                // Получаем элемент input
-                const input = document.getElementById(id);
-                
-                // Получаем правильный ответ
-                const answer = input.dataset.answer;
-                
-                // Сравниваем ответ пользователя с правильным (без учета пробелов)
-                if (input.value.trim() === answer) {
-                    // Если правильно - добавляем 1 балл
-                    serialScore = 1;
-                }
-            });
-
-            // ПРОВЕРКА ВАРИАНТА B: Слово WORLD наоборот
-            
-            // Получаем поле ввода для слова WORLD наоборот
-            const worldInput = document.getElementById('world-backwards');
-            
-            // Получаем правильный ответ (dlrow)
-            const worldAnswer = worldInput.dataset.answer;
-            
-            // Переменная для подсчета баллов за WORLD
-            let worldScore = 0;
-            
-            // Проверяем полностью правильный ответ
-            if (worldInput.value.toLowerCase().trim() === worldAnswer) {
-                // Если полностью правильно - 1 балл
-                worldScore = 1;
+        if (commandSequence.length === 3) {
+            const correct = commandSequence[0] === 'blue' &&
+                            commandSequence[1] === 'red' &&
+                            commandSequence[2] === 'green';
+            if (correct) {
+                scores.command = 1;
+                feedback.textContent = '✓ Correct! You followed all three steps in order.';
+                feedback.style.color = '#42f545';
             } else {
-                // Если не полностью правильно - считаем частичные баллы
-                // Подсчет на основе правильного порядка букв
-                
-                // Получаем введенный ответ в нижнем регистре
-                const userAnswer = worldInput.value.toLowerCase().trim();
-                
-                // Счетчик правильно расположенных букв
-                let correctOrder = 0;
-                
-                // Индекс последней найденной буквы
-                let lastIndex = -1;
-                
-                // Проходим по каждой букве введенного ответа
-                for (let char of userAnswer) {
-                    // Ищем эту букву в правильном ответе после предыдущей найденной буквы
-                    const index = worldAnswer.indexOf(char, lastIndex + 1);
-                    
-                    // Если буква найдена в правильном порядке
-                    if (index > lastIndex) {
-                        // Увеличиваем счетчик
-                        correctOrder++;
-                        
-                        // Обновляем индекс последней найденной буквы
-                        lastIndex = index;
-                    }
-                }
-                
-                // Баллы равны количеству букв в правильном порядке
-                worldScore = correctOrder > 0 ? 1 : 0;
+                scores.command = 0;
+                feedback.textContent = '✗ Incorrect sequence. The correct order was: blue → red → green';
+                feedback.style.color = '#f54242';
             }
-
-            // Используем лучший результат из двух вариантов (Serial Sevens или WORLD)
-            // Math.max выбирает большее значение
-            scores.attention = Math.max(serialScore, worldScore);
-
-            // ВОПРОС 5: ВОСПОМИНАНИЕ СЛОВ (максимум 1 балл)
-            
-            // Обнуляем баллы за воспоминание
-            scores.recall = 0;
-            
-            // Массив ID полей для ввода вспомненных слов
-            const recallWords = ['recall-word1', 'recall-word2', 'recall-word3'];
-            
-            // Проверяем каждое поле
-            recallWords.forEach(id => {
-                // Получаем элемент input
-                const input = document.getElementById(id);
-                
-                // Получаем правильный ответ
-                const answer = input.dataset.answer;
-                
-                // Сравниваем введенное слово с правильным
-                if (input.value.toLowerCase().trim() === answer) {
-                    // Если правильно - добавляем 1 балл
-                    scores.recall = 1;
-                }
-            });
-
-            // ВОПРОС 6: НАЗЫВАНИЕ ПРЕДМЕТОВ (максимум 2 балла)
-            
-            // Обнуляем баллы за называние
-            scores.naming = 0;
-            
-            // Проверяем оба объекта (часы и карандаш)
-            ['object1', 'object2'].forEach(id => {
-                // Получаем элемент input
-                const input = document.getElementById(id);
-                
-                // Получаем правильный ответ
-                const answer = input.dataset.answer;
-                
-                // Получаем введенное значение
-                const value = input.value.toLowerCase().trim();
-                
-                // Для первого объекта (часы) принимаем несколько вариантов ответа
-                if (id === 'object1' && (value === 'watch' || value === 'wristwatch' || value === 'clock')) {
-                    // Если любой из вариантов правильный - добавляем 1 балл
-                    scores.naming++;
-                } 
-                // Для второго объекта (карандаш) также принимаем два варианта
-                else if (id === 'object2' && (value === 'pencil' || value === 'pen')) {
-                    // Если любой из вариантов правильный - добавляем 1 балл
-                    scores.naming = 1; // Устанавливаем 1 балл, так как максимум 2 балла за оба объекта
-                }
-            });
-
-            // ВОПРОС 7: ПОВТОРЕНИЕ ФРАЗЫ (максимум 1 балл)
-            
-            // Обнуляем баллы за повторение
-            scores.repetition = 0;
-            
-            // Получаем введенную фразу
-            const repetition = document.getElementById('repetition').value.toLowerCase().trim();
-            
-            // Проверяем точность повторения (принимаем с запятыми и без)
-            if (repetition === 'no ifs, ands, or buts' || repetition === 'no ifs ands or buts') {
-                // Если фраза правильная - 1 балл
-                scores.repetition = 1;
-            }
-
-            // ВОПРОС 8: КОМАНДЫ - уже подсчитаны ранее
-            // Баллы были установлены при нажатии кнопок (см. обработчик commandButtons)
-            // scores.command уже содержит правильное значение
-
-            // ВОПРОС 9: ЧТЕНИЕ И ВЫПОЛНЕНИЕ (максимум 1 балл)
-            
-            // ВОПРОС 8: НАПИСАНИЕ ПРЕДЛОЖЕНИЯ (максимум 1 балл)
-            
-            // Получаем текст предложения
-            const sentence = document.getElementById('sentence').value.trim();
-            
-            // Обнуляем баллы за написание
-            scores.writing = 0;
-            
-            // Базовая проверка: предложение должно быть достаточно длинным
-            // и содержать минимум 3 слова (подлежащее, сказуемое и возможно дополнение)
-            if (sentence.length > 5 && sentence.split(' ').length >= 3) {
-                // Если условия выполнены - 1 балл
-                scores.writing = 1;
-            }
-
-            // Questions 9-30: Each is 1 point if correct
-            for (let i = 9; i <= 30; i++) {
-                scores[`q${i}`] = 0;
-                const input = document.getElementById(`q${i}`);
-                if (input && input.value.toLowerCase().trim() === input.dataset.answer) {
-                    scores[`q${i}`] = 1;
-                }
-            }
-
         }
+    });
+});
 
-        // ========================================
-        // ПОКАЗ РЕЗУЛЬТАТОВ
-        // ========================================
-        
-        /**
-         * Функция отображения результатов теста
-         * Подсчитывает финальный балл и показывает интерпретацию
-         */
-        function showResults() {
-            // Вызываем функцию подсчета баллов по всем категориям
-            calculateScores();
-            
-            // Вычисляем общий балл
-            // Object.values(scores) - получает все значения из объекта scores в массив
-            // reduce((a, b) => a + b, 0) - суммирует все элементы массива
-            const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-            
-            // Отображаем общий балл на странице
-            document.getElementById('totalScore').textContent = totalScore;
-            
-            // ИНТЕРПРЕТАЦИЯ РЕЗУЛЬТАТА
-            
-            // Переменная для хранения HTML текста интерпретации
-            let interpretation = '';
-            
-            // Переменная для CSS класса уровня (не используется в коде, но объявлена)
-            let levelClass = '';
-            
-            // Определяем уровень когнитивных нарушений на основе баллов
-            
-            // 19-30 баллов: Норма
-            if (totalScore <= 30) {
-                interpretation = '<span class="interpretation-level level-normal">Normal cognition</span><p>Score indicates no cognitive impairment.</p>';
-            } 
-            // 18-21 балла: Легкие нарушения
-            else if (totalScore < 20) {
-                interpretation = '<span class="interpretation-level level-mild">Mild cognitive impairment</span><p>Score suggests mild cognitive impairment. Consider professional evaluation.</p>';
-            } 
-            // 13-17 баллов: Умеренные нарушения
-            else if (totalScore < 13) {
-                interpretation = '<span class="interpretation-level level-moderate">Moderate cognitive impairment</span><p>Score indicates moderate cognitive impairment. Professional evaluation recommended.</p>';
-            } 
-            // 0-12 баллов: Тяжелые нарушения
-            else {
-                interpretation = '<span class="interpretation-level level-severe">Severe cognitive impairment</span><p>Score suggests severe cognitive impairment. Please consult a healthcare professional.</p>';
-            }
-            
-            // Вставляем HTML с интерпретацией на страницу
-            document.getElementById('interpretationText').innerHTML = interpretation;
-            
-            // ДЕТАЛЬНАЯ РАЗБИВКА ПО КАТЕГОРИЯМ
-            
-            // Создаем HTML строку с баллами по каждой категории
-            // Используем template literals (обратные кавычки) для многострочного текста
-            // ${переменная} - вставляет значение переменной в текст
-            let breakdown = `
-                <p><strong>Orientation to Time:</strong> ${scores.orientation_time}/1</p>
-                <p><strong>Registration:</strong> ${scores.registration}/1</p>
-                <p><strong>Attention & Calculation:</strong> ${scores.attention}/1</p>
-                <p><strong>Recall:</strong> ${scores.recall}/1</p>
-                <p><strong>Naming:</strong> ${scores.naming}/1</p>
-                <p><strong>Repetition:</strong> ${scores.repetition}/1</p>
-                <p><strong>Three-Step Command:</strong> ${scores.command}/1</p>
-                <p><strong>Writing:</strong> ${scores.writing}/1</p>
-            `;
-            
-            // Add breakdown for questions 9-30
-            for (let i = 9; i <= 30; i++) {
-                breakdown += `<p><strong>Question ${i}:</strong> ${scores[`q${i}`]}/1</p>`;
-            }
-            
-            // Вставляем разбивку на страницу
-            document.getElementById('categoryBreakdown').innerHTML = breakdown;
-            
-            // Скрываем все секции с вопросами
-            document.querySelectorAll('.question-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Показываем секцию с результатами
-            document.getElementById('resultsSection').classList.add('active');
-            
-            // Скрываем кнопки навигации
-            document.querySelector('.navigation').style.display = 'none';
-        }
+// ========================================
+// NAVIGATION
+// ========================================
 
-        // ========================================
-        // ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ КНОПОК НАВИГАЦИИ
-        // ========================================
-        
-        /**
-         * Обработчик кнопки "Next" (Далее)
-         * Переходит к следующему вопросу или показывает результаты
-         */
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            // Проверяем, не последний ли это вопрос
-            if (currentQuestion < totalQuestions) {
-                // Если не последний - показываем следующий вопрос
-                showQuestion(currentQuestion + 1);
-            } else {
-                // Если последний - показываем результаты
-                showResults();
-            }
-        });
+function updateProgress() {
+    document.getElementById('progressFill').style.width = (currentQuestion / totalQuestions) * 100 + '%';
+}
 
-        /**
-         * Обработчик кнопки "Previous" (Назад)
-         * Возвращает к предыдущему вопросу
-         */
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            // Проверяем, не первый ли это вопрос
-            if (currentQuestion > 1) {
-                // Если не первый - показываем предыдущий вопрос
-                showQuestion(currentQuestion - 1);
-            }
-        });
+function showQuestion(num) {
+    document.querySelectorAll('.question-section').forEach(s => s.classList.remove('active'));
+    const target = document.querySelector(`[data-question="${num}"]`);
+    if (target) target.classList.add('active');
+    document.getElementById('prevBtn').style.display = num > 1 ? 'block' : 'none';
+    document.getElementById('nextBtn').textContent = num === totalQuestions ? 'Finish Test' : 'Next';
+    currentQuestion = num;
+    updateProgress();
+}
 
-        // ========================================
-        // ИНИЦИАЛИЗАЦИЯ
-        // ========================================
-        
-        // При загрузке страницы обновляем прогресс-бар
-        // (показываем что мы на первом вопросе)
-        updateProgress();
+// ========================================
+// SCORING
+// ========================================
+
+function calculateScores() {
+
+    // Q1: Orientation to Time — 1 point per correct field (max 4)
+    scores.orientation_time = 0;
+    const now = new Date();
+    const correctYear   = String(now.getFullYear());
+    const correctMonth  = now.toLocaleString('en-US', { month: 'long' }).toLowerCase();
+    const correctDay    = now.toLocaleString('en-US', { weekday: 'long' }).toLowerCase();
+    const m = now.getMonth();
+    const correctSeason = m <= 1 || m === 11 ? 'winter'
+                        : m <= 4 ? 'spring'
+                        : m <= 7 ? 'summer'
+                        : 'fall';
+    const seasonAliases = { fall: ['fall', 'autumn'], spring: ['spring'], summer: ['summer'], winter: ['winter'] };
+
+    if (document.getElementById('q1-year')?.value.trim() === correctYear) scores.orientation_time++;
+    if (seasonAliases[correctSeason]?.includes(document.getElementById('q1-season')?.value.trim().toLowerCase())) scores.orientation_time++;
+    if (document.getElementById('q1-day')?.value.trim().toLowerCase() === correctDay) scores.orientation_time++;
+    if (document.getElementById('q1-month')?.value.trim().toLowerCase() === correctMonth) scores.orientation_time++;
+
+    // Q2: Registration — 1 point per correct word (max 3)
+    scores.registration = 0;
+    ['reg-word1', 'reg-word2', 'reg-word3'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input?.value.toLowerCase().trim() === input?.dataset.answer) scores.registration++;
+    });
+
+    // Q3: Serial Sevens — max 1 (any correct answer scores)
+    scores.serial_sevens = 0;
+    ['serial1', 'serial2', 'serial3', 'serial4', 'serial5'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input?.value.trim() === input?.dataset.answer) scores.serial_sevens = 1;
+    });
+
+    // Q4: WORLD Backwards — max 1
+    const worldInput = document.getElementById('world-backwards');
+    scores.world_backwards = worldInput?.value.toLowerCase().trim() === worldInput?.dataset.answer ? 1 : 0;
+
+    // Q4: Naming — 1 point per object (max 2)
+    scores.naming = 0;
+    const v1 = document.getElementById('object1')?.value.toLowerCase().trim();
+    if (v1 === 'watch' || v1 === 'wristwatch' || v1 === 'clock') scores.naming++;
+    const v2 = document.getElementById('object2')?.value.toLowerCase().trim();
+    if (v2 === 'pencil' || v2 === 'pen') scores.naming++;
+
+    // Q5: Repetition — 1 point per correct word of phrase (max 5)
+    // Phrase: "No ifs, ands, or buts" → 5 words
+    scores.repetition = 0;
+    const correctPhrase = ['no', 'ifs', 'ands', 'or', 'buts'];
+    const userPhrase = (document.getElementById('repetition')?.value.toLowerCase().trim().replace(/,/g, '') || '').split(/\s+/);
+    correctPhrase.forEach((word, i) => {
+        if (userPhrase[i] === word) scores.repetition++;
+    });
+
+    // Q6: Three-Step Command — max 1 (scored live by button handler)
+    // scores.command already set
+
+    // Q7: Writing — 10 points if sentence has subject + verb, 0 otherwise
+    scores.writing = 0;
+    const sentence = document.getElementById('sentence')?.value.trim() || '';
+    const words = sentence.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+    const subjects = ['i','you','he','she','it','we','they','the','a','an',
+                      'my','your','his','her','our','their','this','that'];
+    const verbs = ['is','are','was','were','be','been','have','has','had',
+                   'do','does','did','will','would','can','could','should',
+                   'may','might','shall','must','go','goes','went','come',
+                   'came','get','got','make','made','take','took','see','saw',
+                   'know','think','want','need','feel','look','seem','become'];
+    const hasSubject = words.some(w => subjects.includes(w) || (/^[a-z]+(s|es)?$/.test(w) && w.length > 2));
+    const hasVerb    = words.some(w => verbs.includes(w) || (/[a-z]+(s|es|ed|ing)$/.test(w) && w.length > 3));
+    if (words.length >= 2 && hasSubject && hasVerb) scores.writing = 9;
+
+    // Q8: Paper Instructions — 1 point per completed step (max 4)
+    scores.papersteps = 0;
+    ['q8-step1', 'q8-step2', 'q8-step3', 'q8-step4'].forEach(id => {
+        if (document.getElementById(id)?.checked) scores.papersteps++;
+    });
+}
+
+// ========================================
+// RESULTS
+// ========================================
+
+function showResults() {
+    calculateScores();
+    const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    document.getElementById('totalScore').textContent = totalScore;
+
+    let interpretation = '';
+    if (totalScore >= 25) {
+        interpretation = '<span class="interpretation-level level-normal">Normal cognition</span><p>Score indicates no cognitive impairment.</p>';
+    } else if (totalScore >= 19) {
+        interpretation = '<span class="interpretation-level level-mild">Mild cognitive impairment</span><p>Score suggests mild cognitive impairment. Consider professional evaluation.</p>';
+    } else if (totalScore >= 10) {
+        interpretation = '<span class="interpretation-level level-moderate">Moderate cognitive impairment</span><p>Score indicates moderate cognitive impairment. Professional evaluation recommended.</p>';
+    } else {
+        interpretation = '<span class="interpretation-level level-severe">Severe cognitive impairment</span><p>Score suggests severe cognitive impairment. Please consult a healthcare professional.</p>';
+    }
+    document.getElementById('interpretationText').innerHTML = interpretation;
+
+    document.getElementById('categoryBreakdown').innerHTML = `
+        <p><strong>1. Orientation to Time:</strong> ${scores.orientation_time}/4</p>
+        <p><strong>2. Registration:</strong> ${scores.registration}/3</p>
+        <p><strong>3. Serial Sevens:</strong> ${scores.serial_sevens}/1</p>
+        <p><strong>4. Spell Word Backwards:</strong> ${scores.world_backwards}/1</p>
+        <p><strong>5. Naming:</strong> ${scores.naming}/2</p>
+        <p><strong>6. Repetition:</strong> ${scores.repetition}/5</p>
+        <p><strong>7. Three-Step Command:</strong> ${scores.command}/1</p>
+        <p><strong>8. Writing:</strong> ${scores.writing}/9</p>
+        <p><strong>9. Paper Instructions:</strong> ${scores.papersteps}/4</p>
+    `;
+
+    document.querySelectorAll('.question-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('resultsSection').classList.add('active');
+    document.querySelector('.navigation').style.display = 'none';
+}
+
+// ========================================
+// BUTTON HANDLERS
+// ========================================
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentQuestion < totalQuestions) {
+        showQuestion(currentQuestion + 1);
+    } else {
+        showResults();
+    }
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentQuestion > 1) showQuestion(currentQuestion - 1);
+});
+
+// ========================================
+// INIT
+// ========================================
+
+updateProgress();

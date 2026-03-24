@@ -26,19 +26,19 @@
                 <div class="questions-group">
                     <div class="question-item">
                         <label for="q1-year">What year is it?</label>
-                        <input type="text" id="q1-year" placeholder="Enter year" data-answer="2024">
+                        <input type="text" id="q1-year" placeholder="Enter year">
                     </div>
                     <div class="question-item">
                         <label for="q1-season">What season is it?</label>
-                        <input type="text" id="q1-season" placeholder="Enter season" data-answer="spring">
+                        <input type="text" id="q1-season" placeholder="Enter season">
                     </div>
                     <div class="question-item">
                         <label for="q1-day">What day of the week is it?</label>
-                        <input type="text" id="q1-day" placeholder="Enter day" data-answer="monday">
+                        <input type="text" id="q1-day" placeholder="Enter day">
                     </div>
                     <div class="question-item">
                         <label for="q1-month">What month is it?</label>
-                        <input type="text" id="q1-month" placeholder="Enter month" data-answer="january">
+                        <input type="text" id="q1-month" placeholder="Enter month">
                     </div>
                 </div>
                 
@@ -49,17 +49,20 @@
                 <h2 class="question-title">2. Registration</h2>
                 <div class="instruction-box">
                     <h3>Instructions:</h3>
-                    <p>You will see names of three objects. Please repeat them now and try to remember them. You will be asked to recall them later.</p>
+                    <p>You will see names of three objects. Please repeat them now and try to remember them.</p>
                 </div>
                 
                 <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-                    <h3 style="color: #856404; font-size: 24px; margin-bottom: 15px;">Remember these three words:</h3>
-                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">APPLE</p>
-                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">TABLE</p>
-                    <p style="font-size: 28px; font-weight: 600; color: #333; margin: 10px 0;">PENNY</p>
+                    <h3 style="color: #856404; font-size: 20px; margin-bottom: 15px;">Listen to the three words:</h3>
+                    <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
+                        <button onclick="speakWord('apple')" class="word-audio-btn">🔊 </button>
+                        <button onclick="speakWord('table')" class="word-audio-btn">🔊 </button>
+                        <button onclick="speakWord('penny')" class="word-audio-btn">🔊 </button>
+                    </div>
+                    <button onclick="speakAllWords()" style="padding: 10px 28px; background: #856404; color: white; border: none; border-radius: 8px; font-size: 15px; cursor: pointer;">▶ Play All Words</button>
                 </div>
 
-                <p class="question-subtitle">Now please type the three words you just saw:</p>
+                <p class="question-subtitle">Now please type the three words you just heared:</p>
                 <div class="word-recall-input">
                     <input type="text" id="reg-word1" placeholder="First word" data-answer="apple">
                     <input type="text" id="reg-word2" placeholder="Second word" data-answer="table">
@@ -67,14 +70,11 @@
                 </div>
             </div>
 
-            <!-- Question 3: Attention and Calculation -->
+            <!-- Question 3: Serial Sevens -->
             <div class="question-section" data-question="3">
-                <h2 class="question-title">3. Attention and Calculation</h2>
-                <p class="question-subtitle">Please choose ONE of the following tasks:</p>
-                
+                <h2 class="question-title">3. Serial Sevens</h2>
+                <p class="question-subtitle">Count backwards from 100 by sevens. Enter the five answers:</p>
                 <div class="instruction-box">
-                    <h3>Option A: Serial Sevens</h3>
-                    <p>Count backwards from 100 by sevens. Enter the five answers:</p>
                     <div class="word-recall-input">
                         <input type="text" id="serial1" placeholder="100 - 7 = ?" data-answer="93">
                         <input type="text" id="serial2" placeholder="Type here"  data-answer="86">
@@ -83,31 +83,23 @@
                         <input type="text" id="serial5" placeholder="Type here"  data-answer="65">
                     </div>
                 </div>
-
-                <div class="instruction-box" style="margin-top: 20px;">
-                    <h3>Option B: Spell "WORLD" Backwards</h3>
-                    <p>Study the word below, then click the button to hide it and type it backwards:</p>
-                    <div id="world-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
-                        <span style="font-size: 48px; font-weight: 800; letter-spacing: 12px; color: #333;">WORLD</span>
-                    </div>
-                    <button id="world-ready-btn" onclick="revealWorldInput()" style="display: block; margin: 0 auto 15px; padding: 10px 24px; background: #0e5c14; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">I'm Ready — Hide the Word</button>
-                    <div id="world-input-area" style="display: none;">
-                        <input type="text" id="world-backwards" placeholder="Type WORLD backwards" data-answer="dlrow" style="margin-top: 10px;">
-                    </div>
-                </div>
             </div>
 
-            <!-- Question 4: Recall -->
+            <!-- Question 4: Spell Word Backwards -->
             <div class="question-section" data-question="4">
-                <h2 class="question-title">4. Recall</h2>
-                <p class="question-subtitle">Please recall the three words from earlier:</p>
-                
-                <div class="word-recall-input">
-                    <input type="text" id="recall-word1" placeholder="First word" data-answer="apple">
-                    <input type="text" id="recall-word2" placeholder="Second word" data-answer="table">
-                    <input type="text" id="recall-word3" placeholder="Third word" data-answer="penny">
+                <h2 class="question-title">4. Spell the Word Backwards</h2>
+                <div class="instruction-box">
+                    <p>Play the word by clicking the "🔊", then click the button to hide it and type it backwards:</p>
+                    <div id="world-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
+                        <button onclick="speakWord('world')" class="word-audio-btn">🔊</button>
+                    </div>
+                    <button id="world-ready-btn" onclick="revealWorldInput()" style="display: block; margin: 0 auto 15px; padding: 10px 24px; background: #0e5c14; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">I'm Ready — Hide the Button</button>
+                    <div id="world-input-area" style="display: none;">
+                        <input type="text" id="world-backwards" placeholder="Type the word you just heard backwards" data-answer="dlrow" style="margin-top: 10px;">
+                    </div>
                 </div>
             </div>
+
 
             <!-- Question 5: Naming -->
             <div class="question-section" data-question="5">
@@ -206,9 +198,9 @@
             <div class="question-section" data-question="6">
                 <h2 class="question-title">6. Repetition</h2>
                 <div class="instruction-box">
-                    <h3>Study the phrase below, then click the button to hide it and type it from memory:</h3>
+                    <h3>Listen to the phrase, then click the button to hide it and type it from memory:</h3>
                     <div id="repetition-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
-                        <span style="font-size: 32px; font-weight: 700; color: #333;">"No ifs, ands, or buts"</span>
+                        <button onclick="speakPhrase()" class="word-audio-btn">🔊 Play Phrase</button>
                     </div>
                     <button id="repetition-ready-btn" onclick="revealRepetitionInput()" style="display: block; margin: 0 auto 15px; padding: 10px 24px; background: #0e5c14; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">I'm Ready — Hide the Phrase</button>
                     <div id="repetition-input-area" style="display: none;">
@@ -222,10 +214,8 @@
                 <h2 class="question-title">7. Three-Step Command</h2>
                 <div class="instruction-box">
                     <h3>Study these instructions in order, then click the button to hide them and follow them from memory:</h3>
-                    <div id="command-instructions-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; margin: 15px 0;">
-                        <p style="font-size: 18px; margin: 10px 0;">1. Click the BLUE button</p>
-                        <p style="font-size: 18px; margin: 10px 0;">2. Click the RED button</p>
-                        <p style="font-size: 18px; margin: 10px 0;">3. Click the GREEN button</p>
+                    <div id="command-instructions-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; margin: 15px 0; text-align: center;">
+                        <button onclick="speakInstructions()" class="word-audio-btn">🔊 Play Instructions</button>
                     </div>
                     <button id="command-ready-btn" onclick="revealCommandButtons()" style="display: block; margin: 0 auto 15px; padding: 10px 24px; background: #0e5c14; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">I'm Ready — Hide the Instructions</button>
                 </div>
@@ -248,99 +238,18 @@
                 
                 <p style="margin-top: 10px; color: #666; font-size: 14px;">The sentence must make sense and have a subject and a verb.</p>
             </div>
-                <!-- Questions 9-30: Simple 1-point questions -->
-                <!-- These are generic questions for demonstration. You can edit the text and answers as needed. -->
                 <div id="extraQuestions">
                     <div class="question-section" data-question="9">
-                        <h2 class="question-title">9. What is your favorite color?</h2>
-                        <input type="text" id="q9" placeholder="Answer" data-answer="blue">
-                    </div>
-                    <div class="question-section" data-question="10">
-                        <h2 class="question-title">10. What is 2 + 2?</h2>
-                        <input type="text" id="q10" placeholder="Answer" data-answer="4">
-                    </div>
-                    <div class="question-section" data-question="11">
-                        <h2 class="question-title">11. What is the capital of France?</h2>
-                        <input type="text" id="q11" placeholder="Answer" data-answer="paris">
-                    </div>
-                    <div class="question-section" data-question="12">
-                        <h2 class="question-title">12. What day comes after Monday?</h2>
-                        <input type="text" id="q12" placeholder="Answer" data-answer="tuesday">
-                    </div>
-                    <div class="question-section" data-question="13">
-                        <h2 class="question-title">13. What is the last month of the year?</h2>
-                        <input type="text" id="q13" placeholder="Answer" data-answer="december">
-                    </div>
-                    <div class="question-section" data-question="14">
-                        <h2 class="question-title">14. What is the first letter of the alphabet?</h2>
-                        <input type="text" id="q14" placeholder="Answer" data-answer="a">
-                    </div>
-                    <div class="question-section" data-question="15">
-                        <h2 class="question-title">15. What is 10 minus 5?</h2>
-                        <input type="text" id="q15" placeholder="Answer" data-answer="5">
-                    </div>
-                    <div class="question-section" data-question="16">
-                        <h2 class="question-title">16. What is the opposite of hot?</h2>
-                        <input type="text" id="q16" placeholder="Answer" data-answer="cold">
-                    </div>
-                    <div class="question-section" data-question="17">
-                        <h2 class="question-title">17. What shape has three sides?</h2>
-                        <input type="text" id="q17" placeholder="Answer" data-answer="triangle">
-                    </div>
-                    <div class="question-section" data-question="18">
-                        <h2 class="question-title">18. What is the color of grass?</h2>
-                        <input type="text" id="q18" placeholder="Answer" data-answer="green">
-                    </div>
-                    <div class="question-section" data-question="19">
-                        <h2 class="question-title">19. What is 3 x 3?</h2>
-                        <input type="text" id="q19" placeholder="Answer" data-answer="9">
-                    </div>
-                    <div class="question-section" data-question="20">
-                        <h2 class="question-title">20. What is the capital of Italy?</h2>
-                        <input type="text" id="q20" placeholder="Answer" data-answer="rome">
-                    </div>
-                    <div class="question-section" data-question="21">
-                        <h2 class="question-title">21. What is the largest planet?</h2>
-                        <input type="text" id="q21" placeholder="Answer" data-answer="jupiter">
-                    </div>
-                    <div class="question-section" data-question="22">
-                        <h2 class="question-title">22. What is the main ingredient in bread?</h2>
-                        <input type="text" id="q22" placeholder="Answer" data-answer="flour">
-                    </div>
-                    <div class="question-section" data-question="23">
-                        <h2 class="question-title">23. What is the freezing point of water (C)?</h2>
-                        <input type="text" id="q23" placeholder="Answer" data-answer="0">
-                    </div>
-                    <div class="question-section" data-question="24">
-                        <h2 class="question-title">24. What is the opposite of up?</h2>
-                        <input type="text" id="q24" placeholder="Answer" data-answer="down">
-                    </div>
-                    <div class="question-section" data-question="25">
-                        <h2 class="question-title">25. What is the color of the sun?</h2>
-                        <input type="text" id="q25" placeholder="Answer" data-answer="yellow">
-                    </div>
-                    <div class="question-section" data-question="26">
-                        <h2 class="question-title">26. What is the capital of Spain?</h2>
-                        <input type="text" id="q26" placeholder="Answer" data-answer="madrid">
-                    </div>
-                    <div class="question-section" data-question="27">
-                        <h2 class="question-title">27. What is 5 x 5?</h2>
-                        <input type="text" id="q27" placeholder="Answer" data-answer="25">
-                    </div>
-                    <div class="question-section" data-question="28">
-                        <h2 class="question-title">28. What is the largest ocean?</h2>
-                        <input type="text" id="q28" placeholder="Answer" data-answer="pacific">
-                    </div>
-                    <div class="question-section" data-question="29">
-                        <h2 class="question-title">29. What is the color of a lemon?</h2>
-                        <input type="text" id="q29" placeholder="Answer" data-answer="yellow">
-                    </div>
-                    <div class="question-section" data-question="30">
-                        <h2 class="question-title">30. What is the capital of Germany?</h2>
-                        <input type="text" id="q30" placeholder="Answer" data-answer="berlin">
-                    </div>
-                </div>
+                        <h2 class="question-title">9. Follow these instructions:</h2>
+                        <label>
+                            <input type="checkbox" id="q8-step1" data-answer="true"> Step 1: Take the paper in your right hand<br>
+                            <input type="checkbox" id="q8-step2" data-answer="true"> Step 2: Fold it in half<br>
+                            <input type="checkbox" id="q8-step3" data-answer="true"> Step 3: Put it on the floor<br>
+                            <input type="checkbox" id="q8-step4" data-answer="true"> I've completed all steps
 
+                        </label>
+                        
+                    </div>
 
             <!-- Results Section -->
             <div class="results-section" id="resultsSection">
