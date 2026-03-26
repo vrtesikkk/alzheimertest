@@ -76,11 +76,13 @@
                 <p class="question-subtitle">Count backwards from 100 by sevens. Enter the five answers:</p>
                 <div class="instruction-box">
                     <div class="word-recall-input">
-                        <input type="text" id="serial1" placeholder="100 - 7 = ?" data-answer="93">
-                        <input type="text" id="serial2" placeholder="Type here"  data-answer="86">
-                        <input type="text" id="serial3" placeholder="Type here"  data-answer="79">
-                        <input type="text" id="serial4" placeholder="Type here"  data-answer="72">
-                        <input type="text" id="serial5" placeholder="Type here"  data-answer="65">
+                        <p id="serial-step" style="text-align:center; color:#666; margin-bottom: 8px; font-size: 14px;">Answer 1 of 5</p>
+                        <input type="text" id="serial-active" placeholder="Type here">
+                        <input type="hidden" id="serial1" data-answer="93">
+                        <input type="hidden" id="serial2" data-answer="86">
+                        <input type="hidden" id="serial3" data-answer="79">
+                        <input type="hidden" id="serial4" data-answer="72">
+                        <input type="hidden" id="serial5" data-answer="65">
                     </div>
                 </div>
             </div>

@@ -82,6 +82,32 @@ function revealCommandButtons() {
 // ========================================
 
 let currentQuestion = 1;
+
+// ========================================
+// SERIAL SEVENS (Q3)
+// ========================================
+
+const serialIds = ['serial1', 'serial2', 'serial3', 'serial4', 'serial5'];
+let serialStep = 0;
+
+let serialTimer = null;
+
+document.getElementById('serial-active').addEventListener('input', function() {
+    clearTimeout(serialTimer);
+    if (this.value.trim() === '') return;
+    serialTimer = setTimeout(() => {
+        document.getElementById(serialIds[serialStep]).value = this.value.trim();
+        serialStep++;
+        this.value = '';
+        if (serialStep < 5) {
+            document.getElementById('serial-step').textContent = `Answer ${serialStep + 1} of 5`;
+        } else {
+            document.getElementById('serial-step').textContent = 'All answers entered ✓';
+            this.disabled = true;
+            this.style.cursor = 'not-allowed';
+        }
+    }, 800);
+});
 const totalQuestions = 9;
 
 let scores = {
