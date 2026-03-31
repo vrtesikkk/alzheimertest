@@ -73,7 +73,7 @@
             <!-- Question 3: Serial Sevens -->
             <div class="question-section" data-question="3">
                 <h2 class="question-title">3. Serial Sevens</h2>
-                <p class="question-subtitle">Count backwards from 100 by sevens. Enter five answers in each appearing blank:</p>
+                <p class="question-subtitle">Starting from 100, subtract 7 each time. Type each answer one by one:</p>
                 <div class="instruction-box">
                     <div class="word-recall-input">
                         <p id="serial-step" style="text-align:center; color:#666; margin-bottom: 8px; font-size: 14px;">Answer 1 of 5</p>
@@ -89,17 +89,24 @@
 
             <!-- Question 4: Spell Word Backwards -->
             <div class="question-section" data-question="4">
-                <h2 class="question-title">4. Spell the Word Backwards</h2>
-                <div class="instruction-box">
-                    <p>Play the word by clicking the "🔊", then type it backwards:</p>
-                    <div id="world-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
-                        <button onclick="speakWord('world')" class="word-audio-btn">🔊</button>
-                    </div>
-                    <div id="world-input-area" style="display: block;">
-                        <input type="text" id="world-backwards" placeholder="Type the word you just heard backwards" data-answer="dlrow" style="margin-top: 10px;">
-                    </div>
-                </div>
-            </div>
+    <h2 class="question-title">4. Spell the Word Backwards</h2>
+    <div class="instruction-box">
+        <p>Play the word by clicking the "🔊", then type it backwards, press enter after each letter, one letter at a time:</p>
+        <div id="world-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
+            <button onclick="speakWord('world')" class="word-audio-btn">🔊</button>
+        </div>
+        <div id="world-input-area">
+            <p id="backwards-step" style="text-align:center; color:#666; margin-bottom: 8px; font-size: 14px;">Letter 1 of 5</p>
+            <input type="text" id="backwards-active" maxlength="1" placeholder="Type one letter" style="margin-top: 10px;">
+            <input type="hidden" id="back1" data-answer="d">
+            <input type="hidden" id="back2" data-answer="l">
+            <input type="hidden" id="back3" data-answer="r">
+            <input type="hidden" id="back4" data-answer="o">
+            <input type="hidden" id="back5" data-answer="w">
+        </div>
+    </div>
+</div>
+
 
 
             <!-- Question 5: Naming -->
@@ -248,8 +255,8 @@
                             <div style="text-align: center;">
                                 <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Target figure:</p>
                                 <svg width="200" height="180" viewBox="0 0 200 180" style="border: 2px solid #e0e0e0; border-radius: 8px; background: white;">
-                                    <polygon points="100,18 38,142 162,142" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
-                                    <polygon points="100,162 38,38 162,38" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+                                    <polygon points="60,55 35,90 60,125 100,125 125,90 100,55" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+                                    <polygon points="100,55 75,90 100,125 140,125 165,90 140,55" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
                                 </svg>
                             </div>
                             <div style="text-align: center;">

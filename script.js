@@ -179,6 +179,25 @@ document.getElementById('serial-active').addEventListener('input', function() {
         }
     }, 800);
 });
+let backwardsStep = 1;
+
+document.getElementById('backwards-active').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const input = this.value.trim().toLowerCase();
+        document.getElementById('back' + backwardsStep).value = input;
+
+        if (backwardsStep < 5) {
+            backwardsStep++;
+            document.getElementById('backwards-step').textContent = 'Letter ' + backwardsStep + ' of 5';
+            this.value = '';
+        } else {
+            this.disabled = true;
+            document.getElementById('backwards-step').textContent = 'Done!';
+        }
+    }
+});
+
+
 const totalQuestions = 9;
 
 let scores = {
@@ -283,8 +302,13 @@ function calculateScores() {
     });
 
     // Q4: WORLD Backwards — max 1
-    const worldInput = document.getElementById('world-backwards');
-    scores.world_backwards = worldInput?.value.toLowerCase().trim() === worldInput?.dataset.answer ? 1 : 0;
+    let q4correct = 0;
+    for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('back' + i);
+    if (el && el.value === el.dataset.answer) q4correct++;
+    }
+        scores.world_backwards = q4correct >= 5 ? 1 : 0;
+
 
     // Q4: Naming — 1 point per object (max 2)
     scores.naming = 0;
