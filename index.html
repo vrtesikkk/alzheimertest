@@ -73,7 +73,7 @@
             <!-- Question 3: Serial Sevens -->
             <div class="question-section" data-question="3">
                 <h2 class="question-title">3. Serial Sevens</h2>
-                <p class="question-subtitle">Count backwards from 100 by sevens. Enter the five answers:</p>
+                <p class="question-subtitle">Count backwards from 100 by sevens. Enter five answers in each appearing blank:</p>
                 <div class="instruction-box">
                     <div class="word-recall-input">
                         <p id="serial-step" style="text-align:center; color:#666; margin-bottom: 8px; font-size: 14px;">Answer 1 of 5</p>
@@ -91,12 +91,11 @@
             <div class="question-section" data-question="4">
                 <h2 class="question-title">4. Spell the Word Backwards</h2>
                 <div class="instruction-box">
-                    <p>Play the word by clicking the "🔊", then click the button to hide it and type it backwards:</p>
+                    <p>Play the word by clicking the "🔊", then type it backwards:</p>
                     <div id="world-display" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; text-align: center; margin: 15px 0;">
                         <button onclick="speakWord('world')" class="word-audio-btn">🔊</button>
                     </div>
-                    <button id="world-ready-btn" onclick="revealWorldInput()" style="display: block; margin: 0 auto 15px; padding: 10px 24px; background: #0e5c14; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">I'm Ready — Hide the Button</button>
-                    <div id="world-input-area" style="display: none;">
+                    <div id="world-input-area" style="display: block;">
                         <input type="text" id="world-backwards" placeholder="Type the word you just heard backwards" data-answer="dlrow" style="margin-top: 10px;">
                     </div>
                 </div>
@@ -242,15 +241,24 @@
             </div>
                 <div id="extraQuestions">
                     <div class="question-section" data-question="9">
-                        <h2 class="question-title">9. Follow these instructions:</h2>
-                        <label>
-                            <input type="checkbox" id="q8-step1" data-answer="true"> Step 1: Take the paper in your right hand<br>
-                            <input type="checkbox" id="q8-step2" data-answer="true"> Step 2: Fold it in half<br>
-                            <input type="checkbox" id="q8-step3" data-answer="true"> Step 3: Put it on the floor<br>
-                            <input type="checkbox" id="q8-step4" data-answer="true"> I've completed all steps
+                        <h2 class="question-title">9. Copy this Drawing</h2>
+                        <p class="question-subtitle">Draw a copy of the figure below as accurately as you can in the box on the right.</p>
 
-                        </label>
-                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-start; justify-content: center; margin: 20px 0;">
+                            <div style="text-align: center;">
+                                <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Target figure:</p>
+                                <svg width="200" height="180" viewBox="0 0 200 180" style="border: 2px solid #e0e0e0; border-radius: 8px; background: white;">
+                                    <polygon points="100,18 38,142 162,142" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+                                    <polygon points="100,162 38,38 162,38" fill="none" stroke="#2c3e50" stroke-width="2.5"/>
+                                </svg>
+                            </div>
+                            <div style="text-align: center;">
+                                <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Your drawing:</p>
+                                <canvas id="drawingCanvas" width="200" height="180" style="border: 2px solid #667eea; border-radius: 8px; background: white; cursor: crosshair; touch-action: none;"></canvas>
+                                <br>
+                                <button onclick="clearCanvas()" style="margin-top: 8px; padding: 6px 16px; background: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">Clear</button>
+                            </div>
+                        </div>
                     </div>
 
             <!-- Results Section -->

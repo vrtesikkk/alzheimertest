@@ -78,6 +78,77 @@ function revealCommandButtons() {
 }
 
 // ========================================
+// DRAWING CANVAS (Q9)
+// ========================================
+
+let isDrawing = false;
+let drawingHasContent = false;
+
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
+ctx.lineWidth = 2.5;
+ctx.lineCap = 'round';
+ctx.strokeStyle = '#2c3e50';
+
+function getCanvasPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches) {
+        return {
+            x: (e.touches[0].clientX - rect.left) * scaleX,
+            y: (e.touches[0].clientY - rect.top) * scaleY
+        };
+    }
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+canvas.addEventListener('mousedown', e => {
+    isDrawing = true;
+    const pos = getCanvasPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+});
+
+canvas.addEventListener('mousemove', e => {
+    if (!isDrawing) return;
+    const pos = getCanvasPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    drawingHasContent = true;
+});
+
+canvas.addEventListener('mouseup', () => { isDrawing = false; });
+canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+
+canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    isDrawing = true;
+    const pos = getCanvasPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!isDrawing) return;
+    const pos = getCanvasPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    drawingHasContent = true;
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => { isDrawing = false; });
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawingHasContent = false;
+}
+
+// ========================================
 // STATE
 // ========================================
 
@@ -249,11 +320,8 @@ function calculateScores() {
     const hasVerb    = words.some(w => verbs.includes(w) || (/[a-z]+(s|es|ed|ing)$/.test(w) && w.length > 3));
     if (words.length >= 2 && hasSubject && hasVerb) scores.writing = 9;
 
-    // Q8: Paper Instructions — 1 point per completed step (max 4)
-    scores.papersteps = 0;
-    ['q8-step1', 'q8-step2', 'q8-step3', 'q8-step4'].forEach(id => {
-        if (document.getElementById(id)?.checked) scores.papersteps++;
-    });
+    // Q9: Drawing — 4 points if canvas has any drawn content
+    scores.papersteps = drawingHasContent ? 4 : 0;
 }
 
 // ========================================
@@ -286,7 +354,7 @@ function showResults() {
         <p><strong>6. Repetition:</strong> ${scores.repetition}/5</p>
         <p><strong>7. Three-Step Command:</strong> ${scores.command}/1</p>
         <p><strong>8. Writing:</strong> ${scores.writing}/9</p>
-        <p><strong>9. Paper Instructions:</strong> ${scores.papersteps}/4</p>
+        <p><strong>9. Drawing:</strong> ${scores.papersteps}/4</p>
     `;
 
     document.querySelectorAll('.question-section').forEach(s => s.classList.remove('active'));
